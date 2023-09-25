@@ -9,13 +9,9 @@ import InputError from "@/Shared//InputError";
 const Create = () => {
     const { data, setData, errors, post, processing } = useForm({
         name: "",
-        email: "",
         phone: "",
         address: "",
-        city: "",
-        region: "",
-        country: "",
-        postal_code: "",
+        type: "hospital",
     });
 
     function handleSubmit(e) {
@@ -52,18 +48,21 @@ const Create = () => {
                         </div>
 
                         <div className="w-full pb-7 pr-6 lg:w-1/2">
-                            <InputLabel forInput="email" value="Email:" />
-                            <TextInput
-                                name="email"
-                                type="email"
-                                value={data.email}
-                                maxLength={50}
-                                handleChange={(e) =>
-                                    setData("email", e.target.value)
+                            <InputLabel forInput="type" value="Type:" />
+                            <SelectInput
+                                name="type"
+                                value={data.type}
+                                onChange={(e) =>
+                                    setData("type", e.target.value)
                                 }
-                            />
-                            <InputError message={errors.email} />
+                            >
+                                <option value="hospital">Hospital</option>
+                                <option value="insurance_company">Insurance Company</option>
+                                <option value="pharma_company">Pharma Company</option>
+                            </SelectInput>
+                            <InputError message={errors.type} />
                         </div>
+
                         <div className="w-full pb-7 pr-6 lg:w-1/2">
                             <InputLabel forInput="phone" value="Phone:" />
                             <TextInput
@@ -87,62 +86,6 @@ const Create = () => {
                                 }
                             />
                             <InputError message={errors.address} />
-                        </div>
-                        <div className="w-full pb-7 pr-6 lg:w-1/2">
-                            <InputLabel forInput="city" value="City:" />
-                            <TextInput
-                                name="city"
-                                value={data.city}
-                                maxLength={50}
-                                handleChange={(e) =>
-                                    setData("city", e.target.value)
-                                }
-                            />
-                            <InputError message={errors.city} />
-                        </div>
-                        <div className="w-full pb-7 pr-6 lg:w-1/2">
-                            <InputLabel
-                                forInput="region"
-                                value="Province/State:"
-                            />
-                            <TextInput
-                                name="region"
-                                value={data.region}
-                                maxLength={50}
-                                handleChange={(e) =>
-                                    setData("region", e.target.value)
-                                }
-                            />
-                            <InputError message={errors.region} />
-                        </div>
-                        <div className="w-full pb-7 pr-6 lg:w-1/2">
-                            <InputLabel forInput="country" value="Country:" />
-                            <SelectInput
-                                name="country"
-                                value={data.country}
-                                onChange={(e) =>
-                                    setData("country", e.target.value)
-                                }
-                            >
-                                <option value=""></option>
-                                <option value="CA">Canada</option>
-                                <option value="US">United States</option>
-                            </SelectInput>
-                        </div>
-                        <div className="w-full pb-7 pr-6 lg:w-1/2">
-                            <InputLabel
-                                forInput="postal_code"
-                                value="Postal code:"
-                            />
-                            <TextInput
-                                name="postal_code"
-                                value={data.postal_code}
-                                maxLength={25}
-                                handleChange={(e) =>
-                                    setData("postal_code", e.target.value)
-                                }
-                            />
-                            <InputError message={errors.postal_code} />
                         </div>
                     </div>
                     <div className="flex items-center justify-end px-8 py-4 bg-gray-100 border-t border-gray-200">

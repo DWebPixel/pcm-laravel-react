@@ -18,16 +18,16 @@ class UsersController extends Controller
     {
         return Inertia::render('Users/Index', [
             'filters' => Request::all('search', 'role', 'trashed'),
-            'users' => Auth::user()->account->users()
-                ->orderByName()
+            'users' => User::orderByName()
                 ->filter(Request::only('search', 'role', 'trashed'))
                 ->get()
                 ->transform(fn ($user) => [
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
-                    'owner' => $user->owner,
-                    'photo' => $user->photo_path ? URL::route('image', ['path' => $user->photo_path, 'w' => 40, 'h' => 40, 'fit' => 'crop']) : null,
+                    'bc_address' => $user->bc_address,
+                    'is_admin' => $user->is_admin,
+                    'is_patient' => $user->is_patient,
                     'deleted_at' => $user->deleted_at,
                 ]),
         ]);
@@ -44,18 +44,25 @@ class UsersController extends Controller
             'first_name' => ['required', 'max:25'],
             'last_name' => ['required', 'max:25'],
             'email' => ['required', 'max:50', 'email', Rule::unique('users')],
+            'bc_address' => ['required', 'max:120', Rule::unique('users')],
             'password' => ['nullable'],
-            'owner' => ['required', 'boolean'],
-            'photo' => ['nullable', 'image'],
+            'is_patient' => ['required', 'boolean'],
+            'address' => ['nullable'],
+            'contact' => ['nullable'],
+        ], [
+            'bc_address.required' => 'Blockchain address is required'
         ]);
 
-        Auth::user()->account->users()->create([
+        User::create([
             'first_name' => Request::get('first_name'),
             'last_name' => Request::get('last_name'),
             'email' => Request::get('email'),
             'password' => Request::get('password'),
-            'owner' => Request::get('owner'),
-            'photo_path' => Request::file('photo') ? Request::file('photo')->store('users') : null,
+            'bc_address' => Request::get('bc_address'),
+            'address' => Request::get('address'),
+            'contact' => Request::get('contact'),
+            'is_patient' => Request::get('is_patient'),
+            // 'photo_path' => Request::file('photo') ? Request::file('photo')->store('users') : null,
         ]);
 
         return Redirect::route('users.index')->with('success', 'User created.');
@@ -68,9 +75,12 @@ class UsersController extends Controller
                 'id' => $user->id,
                 'first_name' => $user->first_name,
                 'last_name' => $user->last_name,
+                'bc_address' => $user->bc_address,
+                'address' => $user->address,
                 'email' => $user->email,
-                'owner' => $user->owner,
-                'photo' => $user->photo_path ? URL::route('image', ['path' => $user->photo_path, 'w' => 60, 'h' => 60, 'fit' => 'crop']) : null,
+                'contact' => $user->contact,
+                'is_patient' => $user->is_patient,
+                // 'photo' => $user->photo_path ? URL::route('image', ['path' => $user->photo_path, 'w' => 60, 'h' => 60, 'fit' => 'crop']) : null,
                 'deleted_at' => $user->deleted_at,
                 'can_delete' => ! App::environment('demo') || ! $user->isDemoUser(),
             ],
@@ -88,15 +98,19 @@ class UsersController extends Controller
             'last_name' => ['required', 'max:25'],
             'email' => ['required', 'max:50', 'email', Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable'],
-            'owner' => ['required', 'boolean'],
-            'photo' => ['nullable', 'image'],
+            'bc_address' => ['required', 'max:120', Rule::unique('users')->ignore($user->id)],
+            'is_patient' => ['required', 'boolean'],
+            'address' => ['nullable'],
+            'contact' => ['nullable'],
+        ], [
+            'bc_address.required' => 'Blockchain address is required'
         ]);
 
-        $user->update(Request::only('first_name', 'last_name', 'email', 'owner'));
+        $user->update(Request::only('first_name', 'last_name', 'email', 'is_patient', 'bc_address', 'address', 'contact'));
 
-        if (Request::file('photo')) {
-            $user->update(['photo_path' => Request::file('photo')->store('users')]);
-        }
+        // if (Request::file('photo')) {
+        //     $user->update(['photo_path' => Request::file('photo')->store('users')]);
+        // }
 
         if (Request::get('password')) {
             $user->update(['password' => Request::get('password')]);

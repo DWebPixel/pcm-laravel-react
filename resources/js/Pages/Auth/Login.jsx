@@ -34,7 +34,7 @@ export default function Login() {
 
             <div className="w-full max-w-md">
                 <Logo
-                    className="block w-full max-w-xs mx-auto text-white fill-current"
+                    className="block text-white text-2xl font-bold text-center"
                     height={50}
                 />
 

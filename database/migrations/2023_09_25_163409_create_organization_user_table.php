@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('organizations', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('organization_user', function (Blueprint $table) {
+            $table->id();
+            $table->integer('organization_id')->index();
             $table->integer('user_id')->index();
-            $table->string('name', 100);
-            $table->string('type', 50);
-            $table->string('phone', 50)->nullable();
-            $table->string('address', 200)->nullable();
+            $table->string('role');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('organizations');
+        Schema::dropIfExists('organization_user');
     }
 };

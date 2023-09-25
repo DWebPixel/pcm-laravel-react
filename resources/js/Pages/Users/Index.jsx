@@ -25,7 +25,9 @@ const Index = () => {
                 <table className="w-full whitespace-nowrap">
                     <thead>
                         <tr className="font-bold text-left">
+                            <th className="px-6 pt-5 pb-4">ID</th>
                             <th className="px-6 pt-5 pb-4">Name</th>
+                            <th className="px-6 pt-5 pb-4">Blockchain Address</th>
                             <th className="px-6 pt-5 pb-4">Email</th>
                             <th className="px-6 pt-5 pb-4" colSpan="2">
                                 Role
@@ -34,7 +36,7 @@ const Index = () => {
                     </thead>
                     <tbody>
                         {users.map(
-                            ({ id, name, photo, email, owner, deleted_at }) => {
+                            ({ id, name, bc_address, email, is_patient, deleted_at }) => {
                                 return (
                                     <tr
                                         key={id}
@@ -45,12 +47,14 @@ const Index = () => {
                                                 href={route("users.edit", id)}
                                                 className="flex items-center px-6 py-4 focus:text-indigo-700 focus:outline-none"
                                             >
-                                                {photo && (
-                                                    <img
-                                                        src={photo}
-                                                        className="block w-5 h-5 mr-2 -my-2 rounded-full"
-                                                    />
-                                                )}
+                                                {id}
+                                            </Link>
+                                        </td>
+                                        <td className="border-t">
+                                            <Link
+                                                href={route("users.edit", id)}
+                                                className="flex items-center px-6 py-4 focus:text-indigo-700 focus:outline-none"
+                                            >
                                                 {name}
                                                 {deleted_at && (
                                                     <Icon
@@ -58,6 +62,14 @@ const Index = () => {
                                                         className="flex-shrink-0 w-3 h-3 ml-2 text-gray-400 fill-current"
                                                     />
                                                 )}
+                                            </Link>
+                                        </td>
+                                        <td className="border-t">
+                                            <Link
+                                                href={route("users.edit", id)}
+                                                className="flex items-center px-6 py-4 focus:text-indigo-700 focus:outline-none"
+                                            >
+                                                {bc_address}
                                             </Link>
                                         </td>
                                         <td className="border-t">
@@ -75,7 +87,7 @@ const Index = () => {
                                                 href={route("users.edit", id)}
                                                 className="flex items-center px-6 py-4 focus:text-indigo focus:outline-none"
                                             >
-                                                {owner ? "Owner" : "User"}
+                                                {is_patient ? "Patient" : "User"}
                                             </Link>
                                         </td>
                                         <td className="w-px border-t">

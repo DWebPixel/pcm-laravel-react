@@ -7,7 +7,7 @@ export default () => {
     const [menuOpened, setMenuOpened] = useState(false);
     return (
         <div className="flex items-center justify-between w-full p-4 text-sm bg-white border-b md:py-0 md:px-12 d:text-md">
-            <div className="mt-1 mr-4">{auth.user.account.name}</div>
+            <div className="mt-1 mr-4">Hello</div>
             <div className="relative">
                 <div
                     className="flex items-center cursor-pointer select-none group"
@@ -33,6 +33,7 @@ export default () => {
                         >
                             My Profile
                         </Link>
+                        { auth.user.is_admin &&
                         <Link
                             href={route("users.index")}
                             className="block px-6 py-2 hover:bg-indigo-600 hover:text-white"
@@ -40,6 +41,7 @@ export default () => {
                         >
                             Manage Users
                         </Link>
+                         }
                         <Link
                             as="button"
                             href={route("logout")}

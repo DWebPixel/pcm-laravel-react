@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('organizations', function (Blueprint $table) {
+        Schema::create('consents', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('patient_id')->index();
             $table->integer('user_id')->index();
-            $table->string('name', 100);
-            $table->string('type', 50);
-            $table->string('phone', 50)->nullable();
-            $table->string('address', 200)->nullable();
+            $table->integer('organization_id')->nullable()->index();
+            $table->string('role', 60)->nullable();
+            $table->string('access_type', 10);
+            $table->json('purpose');
+            $table->string('status', 20)->default('waiting');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('organizations');
+        Schema::dropIfExists('consents');
     }
 };

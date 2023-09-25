@@ -25,13 +25,9 @@ const Edit = () => {
         delete: destroy,
     } = useForm({
         name: organization.name || "",
-        email: organization.email || "",
+        type: organization.type || "",
         phone: organization.phone || "",
         address: organization.address || "",
-        city: organization.city || "",
-        region: organization.region || "",
-        country: organization.country || "",
-        postal_code: organization.postal_code || "",
     });
 
     function handleSubmit(e) {
@@ -133,19 +129,21 @@ const Edit = () => {
                         </Field>
 
                         <Field
-                            label="email"
-                            value="Email:"
-                            errors={errors.email}
+                            label="type"
+                            value="Role:"
+                            errors={errors.type}
                         >
-                            <TextInput
-                                name="email"
-                                type="email"
-                                value={data.email}
-                                maxLength={50}
-                                handleChange={(e) =>
-                                    setData("email", e.target.value)
+                            <SelectInput
+                                name="type"
+                                value={data.type}
+                                onChange={(e) =>
+                                    setData("type", e.target.value)
                                 }
-                            />
+                            >
+                                <option value="hospital">Hospital</option>
+                                <option value="insurance_company">Insurance Company</option>
+                                <option value="pharma_company">Pharma Company</option>
+                            </SelectInput>
                         </Field>
 
                         <Field
@@ -177,65 +175,6 @@ const Edit = () => {
                                 }
                             />
                         </Field>
-
-                        <Field label="city" value="City:" errors={errors.city}>
-                            <TextInput
-                                name="city"
-                                value={data.city}
-                                maxLength={50}
-                                handleChange={(e) =>
-                                    setData("city", e.target.value)
-                                }
-                            />
-                        </Field>
-
-                        <Field
-                            label="region"
-                            value="Province/State:"
-                            errors={errors.region}
-                        >
-                            <TextInput
-                                name="region"
-                                value={data.region}
-                                maxLength={50}
-                                handleChange={(e) =>
-                                    setData("region", e.target.value)
-                                }
-                            />
-                        </Field>
-
-                        <Field
-                            label="country"
-                            value="Country:"
-                            errors={errors.country}
-                        >
-                            <SelectInput
-                                name="country"
-                                value={data.country}
-                                onChange={(e) =>
-                                    setData("country", e.target.value)
-                                }
-                            >
-                                <option value=""></option>
-                                <option value="CA">Canada</option>
-                                <option value="US">United States</option>
-                            </SelectInput>
-                        </Field>
-
-                        <Field
-                            label="postal_code"
-                            value="Postal code:"
-                            errors={errors.postal_code}
-                        >
-                            <TextInput
-                                name="postal_code"
-                                value={data.postal_code}
-                                maxLength={25}
-                                handleChange={(e) =>
-                                    setData("postal_code", e.target.value)
-                                }
-                            />
-                        </Field>
                     </div>
                     <div className="flex items-center px-8 py-4 bg-gray-100 border-t border-gray-200">
                         {!organization.deleted_at && modalContent()}
@@ -249,21 +188,30 @@ const Edit = () => {
                     </div>
                 </form>
             </div>
-            <h2 className="mt-12 text-2xl font-bold">Contacts</h2>
+            <div className="flex mt-12 justify-between">
+                <h2 className=" text-2xl font-bold">Users</h2>
+                <Link
+                    href={route('organizations.create_user', organization)}
+                    className="px-6 py-3 rounded bg-indigo-600 text-white text-sm leading-4 font-bold whitespace-nowrap hover:bg-orange-400 focus:bg-orange-400 transition ease-in-out duration-150"
+                >
+                    <div className="">Add User</div>
+                </Link>
+            </div>
             <div className="mt-6 overflow-x-auto bg-white rounded shadow">
                 <table className="w-full whitespace-nowrap">
                     <thead>
                         <tr className="font-bold text-left">
                             <th className="px-6 pt-5 pb-4">Name</th>
-                            <th className="px-6 pt-5 pb-4">City</th>
+                            <th className="px-6 pt-5 pb-4">Role</th>
+                            <th className="px-6 pt-5 pb-4">Blockchain Address</th>
                             <th className="px-6 pt-5 pb-4" colSpan="2">
-                                Phone
+                                Email
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        {organization.contacts.map(
-                            ({ id, name, phone, city, deleted_at }) => {
+                        {organization.users?.map(
+                            ({ id, name, email, bc_address, deleted_at, role }) => {
                                 return (
                                     <tr
                                         key={id}
@@ -272,7 +220,7 @@ const Edit = () => {
                                         <td className="border-t">
                                             <Link
                                                 href={route(
-                                                    "contacts.edit",
+                                                    "users.edit",
                                                     id
                                                 )}
                                                 className="flex items-center px-6 py-4 focus:text-indigo focus:outline-none"
@@ -290,31 +238,43 @@ const Edit = () => {
                                             <Link
                                                 tabIndex="-1"
                                                 href={route(
-                                                    "contacts.edit",
+                                                    "users.edit",
                                                     id
                                                 )}
-                                                className="flex items-center px-6 py-4 focus:text-indigo focus:outline-none"
+                                                className="flex items-center px-6 py-4 focus:text-indigo focus:outline-none capitalize"
                                             >
-                                                {city}
+                                                {role}
                                             </Link>
                                         </td>
                                         <td className="border-t">
                                             <Link
                                                 tabIndex="-1"
                                                 href={route(
-                                                    "contacts.edit",
+                                                    "users.edit",
                                                     id
                                                 )}
                                                 className="flex items-center px-6 py-4 focus:text-indigo focus:outline-none"
                                             >
-                                                {phone}
+                                                {bc_address}
+                                            </Link>
+                                        </td>
+                                        <td className="border-t">
+                                            <Link
+                                                tabIndex="-1"
+                                                href={route(
+                                                    "users.edit",
+                                                    id
+                                                )}
+                                                className="flex items-center px-6 py-4 focus:text-indigo focus:outline-none"
+                                            >
+                                                {email}
                                             </Link>
                                         </td>
                                         <td className="w-px border-t">
                                             <Link
                                                 tabIndex="-1"
                                                 href={route(
-                                                    "contacts.edit",
+                                                    "users.edit",
                                                     id
                                                 )}
                                                 className="flex items-center px-4"
@@ -329,10 +289,10 @@ const Edit = () => {
                                 );
                             }
                         )}
-                        {organization.contacts.length === 0 && (
+                        {organization.users?.length === 0 && (
                             <tr>
                                 <td className="px-6 py-4 border-t" colSpan="4">
-                                    No contacts found.
+                                    No users found.
                                 </td>
                             </tr>
                         )}

@@ -10,7 +10,7 @@ export default ({ className, onClick }) => {
                 link="organizations.index"
                 icon="office"
             />
-            <MainMenuItem text="Contacts" link="contacts.index" icon="users" />
+            <MainMenuItem text="Patients" link="contacts.index" icon="users" />
             <MainMenuItem text="Reports" link="reports" icon="printer" />
         </div>
     );

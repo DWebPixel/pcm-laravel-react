@@ -13,8 +13,10 @@ const Create = () => {
         last_name: "",
         email: "",
         password: "",
-        owner: "0",
-        photo: "",
+        bc_address: "",
+        address: "",
+        contact: "",
+        is_patient: "0",
     });
 
     function handleSubmit(e) {
@@ -84,6 +86,45 @@ const Create = () => {
                             <InputError message={errors.email} />
                         </div>
                         <div className="w-full pb-7 pr-6 lg:w-1/2">
+                            <InputLabel forInput="contact" value="Contact:" />
+                            <TextInput
+                                name="contact"
+                                type="contact"
+                                value={data.contact}
+                                maxLength={50}
+                                handleChange={(e) =>
+                                    setData("contact", e.target.value)
+                                }
+                            />
+                            <InputError message={errors.contact} />
+                        </div>
+                        <div className="w-full pb-7 pr-6 lg:w-1/2">
+                            <InputLabel forInput="bc_address" value="Blockchain Address:" />
+                            <TextInput
+                                name="bc_address"
+                                type="bc_address"
+                                value={data.bc_address}
+                                maxLength={50}
+                                handleChange={(e) =>
+                                    setData("bc_address", e.target.value)
+                                }
+                            />
+                            <InputError message={errors.bc_address} />
+                        </div>
+                        <div className="w-full pb-7 pr-6 lg:w-1/2">
+                            <InputLabel forInput="bc_address" value="Address:" />
+                            <TextInput
+                                name="address"
+                                type="address"
+                                value={data.address}
+                                maxLength={50}
+                                handleChange={(e) =>
+                                    setData("address", e.target.value)
+                                }
+                            />
+                            <InputError message={errors.address} />
+                        </div>
+                        <div className="w-full pb-7 pr-6 lg:w-1/2">
                             <InputLabel forInput="password" value="Password:" />
                             <TextInput
                                 name="password"
@@ -95,19 +136,19 @@ const Create = () => {
                             />
                         </div>
                         <div className="w-full pb-7 pr-6 lg:w-1/2">
-                            <InputLabel forInput="owner" value="Owner:" />
+                            <InputLabel forInput="is_patient" value="Role:" />
                             <SelectInput
-                                name="owner"
-                                value={data.owner}
+                                name="is_patient"
+                                value={data.is_patient}
                                 onChange={(e) =>
-                                    setData("owner", e.target.value)
+                                    setData("is_patient", e.target.value)
                                 }
                             >
-                                <option value="1">Yes</option>
-                                <option value="0">No</option>
+                                <option value="1">Patient</option>
+                                <option value="0">User</option>
                             </SelectInput>
                         </div>
-                        <FileInput
+                        {/* <FileInput
                             className="w-full pb-8 pr-6 lg:w-1/2"
                             label="Photo"
                             name="photo"
@@ -115,7 +156,7 @@ const Create = () => {
                             errors={errors.photo}
                             value={data.photo}
                             onChange={(photo) => setData("photo", photo)}
-                        />
+                        /> */}
                     </div>
                     <div className="flex items-center justify-end px-8 py-4 bg-gray-100 border-t border-gray-200">
                         <LoadingButton

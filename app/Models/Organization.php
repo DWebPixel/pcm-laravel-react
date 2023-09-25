@@ -15,9 +15,9 @@ class Organization extends Model
         return $this->where($field ?? 'id', $value)->withTrashed()->firstOrFail();
     }
 
-    public function contacts()
+    public function users()
     {
-        return $this->hasMany(Contact::class);
+        return $this->belongsToMany(User::class)->withPivot('role');
     }
 
     public function scopeFilter($query, array $filters)

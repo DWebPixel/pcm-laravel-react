@@ -29,10 +29,12 @@ const Edit = () => {
     } = useForm({
         first_name: user.first_name || "",
         last_name: user.last_name || "",
+        address: user.address || "",
+        bc_address: user.bc_address || "",
         email: user.email || "",
+        contact: user.contact || "",
         password: user.password || "",
-        owner: user.owner ? "1" : "0" || "0",
-        photo: "",
+        is_patient: user.is_patient ? "1" : "0" || "0",
         _method: "PUT",
     });
 
@@ -186,6 +188,55 @@ const Edit = () => {
                         </Field>
 
                         <Field
+                            label="contact"
+                            value="Contact:"
+                            errors={errors.contact}
+                        >
+                            <TextInput
+                                name="contact"
+                                type="contact"
+                                value={data.contact}
+                                maxLength={50}
+                                handleChange={(e) =>
+                                    setData("contact", e.target.value)
+                                }
+                            />
+                        </Field>
+
+                        <Field
+                            label="bc_address"
+                            value="Blockchain Address:"
+                            errors={errors.bc_address}
+                        >
+                            <TextInput
+                                name="bc_address"
+                                type="bc_address"
+                                value={data.bc_address}
+                                maxLength={50}
+                                handleChange={(e) =>
+                                    setData("bc_address", e.target.value)
+                                }
+                            />
+                        </Field>
+
+
+                        <Field
+                            label="address"
+                            value="Address:"
+                            errors={errors.address}
+                        >
+                            <TextInput
+                                name="address"
+                                type="address"
+                                value={data.address}
+                                maxLength={50}
+                                handleChange={(e) =>
+                                    setData("address", e.target.value)
+                                }
+                            />
+                        </Field>
+
+                        <Field
                             label="password"
                             value="Password:"
                             errors={errors.password}
@@ -201,31 +252,22 @@ const Edit = () => {
                         </Field>
 
                         <Field
-                            label="owner"
-                            value="Owner:"
-                            errors={errors.owner}
+                            label="is_patient"
+                            value="Role:"
+                            errors={errors.is_patient}
                         >
                             <SelectInput
-                                name="owner"
-                                value={data.owner}
+                                name="is_patient"
+                                value={data.is_patient}
                                 onChange={(e) =>
-                                    setData("owner", e.target.value)
+                                    setData("is_patient", e.target.value)
                                 }
                             >
-                                <option value="1">Yes</option>
-                                <option value="0">No</option>
+                                <option value="1">Patient</option>
+                                <option value="0">User</option>
                             </SelectInput>
                         </Field>
 
-                        <FileInput
-                            className="w-full pb-8 pr-6 lg:w-1/2"
-                            label="Photo"
-                            name="photo"
-                            accept="image/*"
-                            errors={errors.photo}
-                            value={data.photo}
-                            onChange={(photo) => setData("photo", photo)}
-                        />
                     </div>
                     <div className="flex items-center px-8 py-4 bg-gray-100 border-t border-gray-200">
                         {!user.deleted_at && user.can_delete && modalContent()}

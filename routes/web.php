@@ -40,6 +40,8 @@ Route::middleware('auth')->group(function () {
     // Organizations
     Route::resource('organizations', OrganizationsController::class)->except(['show']);
     Route::put('organizations/{organization}/restore', [OrganizationsController::class, 'restore'])->name('organizations.restore');
+    Route::get('organizations/{organization}/create-user', [OrganizationsController::class, 'createUser'])->name('organizations.create_user');
+    Route::post('organizations/{organization}/store-user', [OrganizationsController::class, 'storeUser'])->name('organizations.store_user');
 
     // Contacts
     Route::resource('contacts', ContactsController::class)->except(['show']);

@@ -71,7 +71,7 @@ export default () => {
                             >
                                 <option value=""></option>
                                 <option value="user">User</option>
-                                <option value="owner">Owner</option>
+                                <option value="patient">Patient</option>
                             </SelectInput>
                         )}
                         <SelectInput

@@ -49,9 +49,9 @@ class User extends Authenticatable
         return $this->where($field ?? 'id', $value)->withTrashed()->firstOrFail();
     }
 
-    public function account()
+    public function organizations()
     {
-        return $this->belongsTo(Account::class);
+        return $this->belongsToMany(Organization::class);
     }
 
     public function getNameAttribute()
@@ -77,8 +77,8 @@ class User extends Authenticatable
     public function scopeWhereRole($query, $role)
     {
         switch ($role) {
-            case 'user': return $query->where('owner', false);
-            case 'owner': return $query->where('owner', true);
+            case 'user': return $query->where('is_patient', false);
+            case 'patient': return $query->where('is_patient', true);
         }
     }
 

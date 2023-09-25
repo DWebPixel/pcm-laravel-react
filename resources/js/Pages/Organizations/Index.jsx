@@ -28,20 +28,34 @@ const Index = () => {
                 <table className="w-full whitespace-nowrap">
                     <thead>
                         <tr className="font-bold text-left">
+                            <th className="px-6 pt-5 pb-4">ID</th>
                             <th className="px-6 pt-5 pb-4">Name</th>
-                            <th className="px-6 pt-5 pb-4">City</th>
+                            <th className="px-6 pt-5 pb-4">Type</th>
+                            <th className="px-6 pt-5 pb-4">Address</th>
                             <th className="px-6 pt-5 pb-4" colSpan="2">
                                 Phone
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map(({ id, name, city, phone, deleted_at }) => {
+                        {data.map(({ id, name, address, phone, type, deleted_at }) => {
                             return (
                                 <tr
                                     key={id}
                                     className="hover:bg-gray-100 focus-within:bg-gray-100"
                                 >
+                                    <td className="border-t">
+                                        <Link
+                                            tabIndex="-1"
+                                            href={route(
+                                                "organizations.edit",
+                                                id
+                                            )}
+                                            className="flex items-center px-6 py-4 focus:text-indigo focus:outline-none"
+                                        >
+                                            {id}
+                                        </Link>
+                                    </td>
                                     <td className="border-t">
                                         <Link
                                             href={route(
@@ -66,11 +80,24 @@ const Index = () => {
                                                 "organizations.edit",
                                                 id
                                             )}
-                                            className="flex items-center px-6 py-4 focus:text-indigo focus:outline-none"
+                                            className="flex items-center px-6 py-4 focus:text-indigo focus:outline-none capitalize"
                                         >
-                                            {city}
+                                            {type}
                                         </Link>
                                     </td>
+                                    <td className="border-t">
+                                        <Link
+                                            tabIndex="-1"
+                                            href={route(
+                                                "organizations.edit",
+                                                id
+                                            )}
+                                            className="flex items-center px-6 py-4 focus:text-indigo focus:outline-none"
+                                        >
+                                            {address}
+                                        </Link>
+                                    </td>
+
                                     <td className="border-t">
                                         <Link
                                             tabIndex="-1"
