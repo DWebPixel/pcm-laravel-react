@@ -43,28 +43,11 @@ const Create = () => {
                                     setData("user_id", e.target.value)
                                 }
                             >
-                                { users.map( ( { id, name}) => {
-                                    return (<option value={id} key={id}>{name}</option>)
+                                { users.map( ( { id, name, role}) => {
+                                    return (<option value={id} key={id}>{name} ({role})</option>)
                                 }) }
                             </SelectInput>
                             <InputError message={errors.user_id} />
-                        </div>
-
-                        <div className="w-full pb-7 pr-6 lg:w-1/2">
-                            <InputLabel forInput="role" value="Role:" />
-                            <SelectInput
-                                name="role"
-                                value={data.role}
-                                onChange={(e) =>
-                                    setData("role", e.target.value)
-                                }
-                            >
-                                { 
-                                roles.map( ( {role, label} ) => {
-                                    return (<option value={role} key={role}>{label}</option>)
-                                }) }
-                            </SelectInput>
-                            <InputError message={errors.role} />
                         </div>
                     </div>
                     <div className="flex items-center justify-end px-8 py-4 bg-gray-100 border-t border-gray-200">

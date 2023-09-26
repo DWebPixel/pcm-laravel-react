@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->integer('organization_id')->index();
             $table->integer('user_id')->index();
-            $table->string('role');
             $table->timestamps();
         });
     }

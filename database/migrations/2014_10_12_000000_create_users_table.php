@@ -20,8 +20,7 @@ return new class extends Migration
             $table->string('contact', 20)->nullable();
             $table->string('bc_address', 120)->unique();
             $table->string('address', 200)->nullable();
-            $table->boolean('is_patient')->default(0);
-            $table->boolean('is_admin')->default(0);
+            $table->string('role');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

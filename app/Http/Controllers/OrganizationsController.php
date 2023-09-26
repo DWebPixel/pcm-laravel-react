@@ -53,7 +53,7 @@ class OrganizationsController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 'bc_address' => $user->bc_address,
-                'role' => $user->pivot->role
+                'role' => $user->role
             ];
         }
 
@@ -93,49 +93,27 @@ class OrganizationsController extends Controller
 
     public function createUser(Organization $organization) {
 
-        $roles = [
-           [
-            'role' => 'doctor',
-            'label' => 'Doctor'
-           ],
-           [
-            'role' => 'nurse',
-            'label' => 'Nurse'
-           ]
-        ];
-
         switch( $organization->type ) {
             case 'insurance_company':
-                $roles = [
-                    [
-                        'role' => 'sales_agent',
-                        'label' => 'Sales Agent'
-                    ],
-                ];
+                $roles = [ 'Sales Agent' ];
                 break;
             case 'pharma_company': 
-                $roles = [
-                    [
-                        'role' => 'medical_reprsentative',
-                        'label' => 'Medical Representative'
-                    ],
-                    [
-                        'role' => 'scientist',
-                        'label' => 'Scientist'
-                    ],
-                ];
+                $roles = ['Medical Representative', 'Scientist'];
                 break;
+            case 'hospital': 
+                $roles = ['Doctor', 'Nurse'];
+                break;    
         }
         return Inertia::render('Organizations/CreateUser', [
             'organization' => $organization,
             'roles' => $roles,
-            'users' => User::where('is_patient', false)->get()->map->only('id', 'name')
+            'users' =>  User::whereIn('role', $roles)->get()->map->only('id', 'name', 'role')
         ]);
     }
 
     public function storeUser(Organization $organization, Request $request){
         $user = User::find(Request::get('user_id'));
-        $organization->users()->attach($user, ['role' => Request::get('role')]);
+        $organization->users()->attach($user);
         return Redirect::route('organizations.edit', $organization)->with('success', 'User added to organization!');
     }
 }

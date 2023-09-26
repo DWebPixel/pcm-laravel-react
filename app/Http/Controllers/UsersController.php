@@ -26,8 +26,7 @@ class UsersController extends Controller
                     'name' => $user->name,
                     'email' => $user->email,
                     'bc_address' => $user->bc_address,
-                    'is_admin' => $user->is_admin,
-                    'is_patient' => $user->is_patient,
+                    'role' => $user->role,
                     'deleted_at' => $user->deleted_at,
                 ]),
         ]);
@@ -46,7 +45,7 @@ class UsersController extends Controller
             'email' => ['required', 'max:50', 'email', Rule::unique('users')],
             'bc_address' => ['required', 'max:120', Rule::unique('users')],
             'password' => ['nullable'],
-            'is_patient' => ['required', 'boolean'],
+            'role' => ['required'],
             'address' => ['nullable'],
             'contact' => ['nullable'],
         ], [
@@ -61,7 +60,7 @@ class UsersController extends Controller
             'bc_address' => Request::get('bc_address'),
             'address' => Request::get('address'),
             'contact' => Request::get('contact'),
-            'is_patient' => Request::get('is_patient'),
+            'role' => Request::get('role'),
             // 'photo_path' => Request::file('photo') ? Request::file('photo')->store('users') : null,
         ]);
 
@@ -79,12 +78,21 @@ class UsersController extends Controller
                 'address' => $user->address,
                 'email' => $user->email,
                 'contact' => $user->contact,
-                'is_patient' => $user->is_patient,
+                'role' => $user->role,
                 // 'photo' => $user->photo_path ? URL::route('image', ['path' => $user->photo_path, 'w' => 60, 'h' => 60, 'fit' => 'crop']) : null,
                 'deleted_at' => $user->deleted_at,
                 'can_delete' => ! App::environment('demo') || ! $user->isDemoUser(),
+                'metas' => $this->getUserMetaFields($user)
             ],
         ]);
+    }
+
+    public function getUserMetaFields($user) {
+        $metas = [];
+        foreach($user->metas as $meta){
+            $metas[$meta->meta_key] = $meta->value;
+        }
+        return $metas;
     }
 
     public function update(User $user): RedirectResponse
@@ -99,14 +107,14 @@ class UsersController extends Controller
             'email' => ['required', 'max:50', 'email', Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable'],
             'bc_address' => ['required', 'max:120', Rule::unique('users')->ignore($user->id)],
-            'is_patient' => ['required', 'boolean'],
+            'role' => ['required'],
             'address' => ['nullable'],
             'contact' => ['nullable'],
         ], [
             'bc_address.required' => 'Blockchain address is required'
         ]);
 
-        $user->update(Request::only('first_name', 'last_name', 'email', 'is_patient', 'bc_address', 'address', 'contact'));
+        $user->update(Request::only('first_name', 'last_name', 'email', 'role', 'bc_address', 'address', 'contact'));
 
         // if (Request::file('photo')) {
         //     $user->update(['photo_path' => Request::file('photo')->store('users')]);
@@ -135,5 +143,31 @@ class UsersController extends Controller
         $user->restore();
 
         return Redirect::back()->with('success', 'User restored.');
+    }
+
+    public function updateMeta(User $user, Request $request): RedirectResponse
+    {
+
+        $fields = Request::all();
+
+        $whitelistKeys = [
+            "dob",
+            "occupation",
+            "emergency_contact",
+            "emergency_contact_phone",
+            "medicare_card_id",
+            "medicare_card_number",
+            "private_health_care",
+            "speciality",
+            "registration_no"
+        ];
+
+        foreach($fields as $key => $value) {
+            if( in_array($key, $whitelistKeys) ) {
+                $user->metas()->updateOrCreate(['meta_key' => $key], ['value' => $value]);
+            }
+        }
+
+        return Redirect::back()->with('success', 'Update successful.');
     }
 }

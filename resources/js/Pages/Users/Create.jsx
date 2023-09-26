@@ -16,7 +16,7 @@ const Create = () => {
         bc_address: "",
         address: "",
         contact: "",
-        is_patient: "0",
+        role: "Patient",
     });
 
     function handleSubmit(e) {
@@ -136,17 +136,22 @@ const Create = () => {
                             />
                         </div>
                         <div className="w-full pb-7 pr-6 lg:w-1/2">
-                            <InputLabel forInput="is_patient" value="Role:" />
+                            <InputLabel forInput="role" value="Role:" />
                             <SelectInput
-                                name="is_patient"
-                                value={data.is_patient}
+                                name="role"
+                                value={data.role}
                                 onChange={(e) =>
-                                    setData("is_patient", e.target.value)
+                                    setData("role", e.target.value)
                                 }
                             >
-                                <option value="1">Patient</option>
-                                <option value="0">User</option>
+                                <option value="Patient">Patient</option>
+                                <option value="Doctor">Doctor</option>
+                                <option value="Nurse">Nurse</option>
+                                <option value="Sales Agent">Sales Agent</option>
+                                <option value="Medical Representative">Medical Representative</option>
+                                <option value="Admin">Admin</option>
                             </SelectInput>
+                            <InputError message={errors.role} />
                         </div>
                         {/* <FileInput
                             className="w-full pb-8 pr-6 lg:w-1/2"

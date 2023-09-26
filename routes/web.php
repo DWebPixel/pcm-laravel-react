@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ImagesController;
 use App\Http\Controllers\OrganizationsController;
+use App\Http\Controllers\PatientsController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
     // Users
     Route::resource('users', UsersController::class)->except(['show']);
     Route::put('users/{user}/restore', [UsersController::class, 'restore'])->name('users.restore');
+    Route::post('users/{user}/update-meta', [UsersController::class, 'updateMeta'])->name('users.update_meta');
 
     // Organizations
     Route::resource('organizations', OrganizationsController::class)->except(['show']);
@@ -43,9 +44,9 @@ Route::middleware('auth')->group(function () {
     Route::get('organizations/{organization}/create-user', [OrganizationsController::class, 'createUser'])->name('organizations.create_user');
     Route::post('organizations/{organization}/store-user', [OrganizationsController::class, 'storeUser'])->name('organizations.store_user');
 
-    // Contacts
-    Route::resource('contacts', ContactsController::class)->except(['show']);
-    Route::put('contacts/{contact}/restore', [ContactsController::class, 'restore'])->name('contacts.restore');
+    // Patients
+    Route::resource('patients', PatientsController::class)->except(['show']);
+    Route::put('patients/{patient}/restore', [PatientsController::class, 'restore'])->name('patients.restore');
 
     // Reports
     Route::get('reports', [ReportsController::class, 'index'])->name('reports');

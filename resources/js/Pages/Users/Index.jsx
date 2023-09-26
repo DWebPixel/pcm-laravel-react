@@ -36,7 +36,7 @@ const Index = () => {
                     </thead>
                     <tbody>
                         {users.map(
-                            ({ id, name, bc_address, email, is_patient, deleted_at }) => {
+                            ({ id, name, bc_address, email, role, deleted_at }) => {
                                 return (
                                     <tr
                                         key={id}
@@ -87,7 +87,7 @@ const Index = () => {
                                                 href={route("users.edit", id)}
                                                 className="flex items-center px-6 py-4 focus:text-indigo focus:outline-none"
                                             >
-                                                {is_patient ? "Patient" : "User"}
+                                                {role}
                                             </Link>
                                         </td>
                                         <td className="w-px border-t">

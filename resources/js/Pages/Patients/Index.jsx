@@ -6,21 +6,21 @@ import SearchFilter from "@/Shared/SearchFilter";
 import AnchorLink from "@/Shared/AnchorLink";
 
 const Index = () => {
-    const { contacts } = usePage().props;
-    const { data, links } = contacts;
+    const { patients } = usePage().props;
+    const { data, links } = patients;
     return (
         <>
-            <Head title="Contacts" />
-            <h1 className="mb-8 text-3xl font-bold">Contacts</h1>
+            <Head title="Patients" />
+            <h1 className="mb-8 text-3xl font-bold">Patients</h1>
             <div className="flex items-center justify-between mb-6">
                 <SearchFilter />
                 <AnchorLink
                     className="btn-indigo focus:outline-none"
-                    href={route("contacts.create")}
+                    href={route("users.create")}
                     style="btn"
                 >
                     <span>Create</span>
-                    <span className="hidden md:inline"> Contact</span>
+                    <span className="hidden md:inline"> Patient</span>
                 </AnchorLink>
             </div>
             <div className="overflow-x-auto bg-white rounded shadow">
@@ -28,10 +28,11 @@ const Index = () => {
                     <thead>
                         <tr className="font-bold text-left">
                             <th className="px-6 pt-5 pb-4">Name</th>
-                            <th className="px-6 pt-5 pb-4">Organization</th>
-                            <th className="px-6 pt-5 pb-4">City</th>
+                            <th className="px-6 pt-5 pb-4">Blockchain Address</th>
+                            <th className="px-6 pt-5 pb-4">Address</th>
+                            <th className="px-6 pt-5 pb-4">Email</th>
                             <th className="px-6 pt-5 pb-4" colSpan="2">
-                                Phone
+                                Contact
                             </th>
                         </tr>
                     </thead>
@@ -40,9 +41,10 @@ const Index = () => {
                             ({
                                 id,
                                 name,
-                                city,
+                                bc_address,
+                                address,
                                 phone,
-                                organization,
+                                email,
                                 deleted_at,
                             }) => (
                                 <tr
@@ -51,7 +53,7 @@ const Index = () => {
                                 >
                                     <td className="border-t">
                                         <Link
-                                            href={route("contacts.edit", id)}
+                                            href={route("users.edit", id)}
                                             className="flex items-center px-6 py-4 focus:text-indigo-700 focus:outline-none"
                                         >
                                             {name}
@@ -67,26 +69,33 @@ const Index = () => {
                                         <Link
                                             tabIndex="1"
                                             className="flex items-center px-6 py-4 focus:text-indigo focus:outline-none"
-                                            href={route("contacts.edit", id)}
+                                            href={route("users.edit", id)}
                                         >
-                                            {organization
-                                                ? organization.name
-                                                : ""}
+                                            {bc_address}
                                         </Link>
                                     </td>
                                     <td className="border-t">
                                         <Link
                                             tabIndex="-1"
-                                            href={route("contacts.edit", id)}
+                                            href={route("users.edit", id)}
                                             className="flex items-center px-6 py-4 focus:text-indigo focus:outline-none"
                                         >
-                                            {city}
+                                            {address}
                                         </Link>
                                     </td>
                                     <td className="border-t">
                                         <Link
                                             tabIndex="-1"
-                                            href={route("contacts.edit", id)}
+                                            href={route("users.edit", id)}
+                                            className="flex items-center px-6 py-4 focus:text-indigo focus:outline-none"
+                                        >
+                                            {email}
+                                        </Link>
+                                    </td>
+                                    <td className="border-t">
+                                        <Link
+                                            tabIndex="-1"
+                                            href={route("users.edit", id)}
                                             className="flex items-center px-6 py-4 focus:text-indigo focus:outline-none"
                                         >
                                             {phone}
@@ -95,7 +104,7 @@ const Index = () => {
                                     <td className="w-px border-t">
                                         <Link
                                             tabIndex="-1"
-                                            href={route("contacts.edit", id)}
+                                            href={route("users.edit", id)}
                                             className="flex items-center px-4 focus:outline-none"
                                         >
                                             <Icon
@@ -110,7 +119,7 @@ const Index = () => {
                         {data.length === 0 && (
                             <tr>
                                 <td className="px-6 py-4 border-t" colSpan="4">
-                                    No contacts found.
+                                    No patients found.
                                 </td>
                             </tr>
                         )}
@@ -122,6 +131,6 @@ const Index = () => {
     );
 };
 
-Index.layout = (page) => <Layout title="Contacts" children={page} />;
+Index.layout = (page) => <Layout title="Patients" children={page} />;
 
 export default Index;

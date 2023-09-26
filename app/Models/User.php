@@ -54,6 +54,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Organization::class);
     }
 
+    public function metas()
+    {
+        return $this->hasMany(UserMeta::class);
+    }
+
     public function getNameAttribute()
     {
         return $this->first_name.' '.$this->last_name;
@@ -72,14 +77,6 @@ class User extends Authenticatable
     public function scopeOrderByName($query)
     {
         $query->orderBy('last_name')->orderBy('first_name');
-    }
-
-    public function scopeWhereRole($query, $role)
-    {
-        switch ($role) {
-            case 'user': return $query->where('is_patient', false);
-            case 'patient': return $query->where('is_patient', true);
-        }
     }
 
     public function scopeFilter($query, array $filters)

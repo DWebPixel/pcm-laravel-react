@@ -33,7 +33,7 @@ export default () => {
                         >
                             My Profile
                         </Link>
-                        { auth.user.is_admin &&
+                        { auth.user.role == 'Admin' &&
                         <Link
                             href={route("users.index")}
                             className="block px-6 py-2 hover:bg-indigo-600 hover:text-white"

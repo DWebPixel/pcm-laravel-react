@@ -34,9 +34,35 @@ const Edit = () => {
         email: user.email || "",
         contact: user.contact || "",
         password: user.password || "",
-        is_patient: user.is_patient ? "1" : "0" || "0",
+        role: user.role,
         _method: "PUT",
     });
+
+
+    const patientFields = {
+        dob: user.metas?.dob || "",
+        occupation: user.metas?.occupation || "",
+        emergency_contact: user.metas?.emergency_contact || "",
+        emergency_contact_phone: user.metas?.emergency_contact_phone || "",
+        medicare_card_id: user.metas?.medicare_card_id || "",
+        medicare_card_number: user.metas?.medicare_card_number || "",
+        private_health_care: user.metas?.private_health_care || ""
+    }
+
+    const doctorFields = {
+        speciality: user.metas?.speciality || "General Practitioner",
+        registration_no: user.metas?.registration_no || ""
+    }
+
+    const metaFields = user.role == 'Patient' ? patientFields : (user.role == 'Doctor' ? doctorFields : {})
+
+    const {
+        data: metaData,
+        setData : setMetaData,
+        errors: metaErrors,
+        post: metaPost,
+        processing: metaProcessing,
+    } = useForm(metaFields);
 
     console.log(user.deleted_at);
 
@@ -44,6 +70,12 @@ const Edit = () => {
         e.preventDefault();
 
         post(route("users.update", user.id));
+    }
+
+    function handleAdditionalDetailsSubmit(e) {
+        e.preventDefault();
+        
+        metaPost(route("users.update_meta", user.id));
     }
 
     const deleteUser = (e) => {
@@ -252,19 +284,23 @@ const Edit = () => {
                         </Field>
 
                         <Field
-                            label="is_patient"
+                            label="role"
                             value="Role:"
-                            errors={errors.is_patient}
+                            errors={errors.role}
                         >
                             <SelectInput
-                                name="is_patient"
-                                value={data.is_patient}
+                                name="role"
+                                value={data.role}
                                 onChange={(e) =>
-                                    setData("is_patient", e.target.value)
+                                    setData("role", e.target.value)
                                 }
                             >
-                                <option value="1">Patient</option>
-                                <option value="0">User</option>
+                                <option value="Patient">Patient</option>
+                                <option value="Doctor">Doctor</option>
+                                <option value="Nurse">Nurse</option>
+                                <option value="Sales Agent">Sales Agent</option>
+                                <option value="Medical Representative">Medical Representative</option>
+                                <option value="Admin">Admin</option>
                             </SelectInput>
                         </Field>
 
@@ -282,6 +318,190 @@ const Edit = () => {
                     </div>
                 </form>
             </div>
+
+
+            { data.role == 'Patient' && (<div className="max-w-3xl overflow-hidden bg-white rounded shadow">
+                <h2 className="px-8 pt-4 text-xl font-bold">Additional Details</h2>
+                <form onSubmit={handleAdditionalDetailsSubmit}>
+                    <div className="flex flex-wrap p-8 -mb-8 -mr-6">
+                        <Field
+                            label="dob"
+                            value="Date Of Birth:"
+                            errors={metaErrors.dob}
+                        >
+                            <TextInput
+                                name="dob"
+                                type="date"
+                                value={metaData.dob}
+                                maxLength={25}
+                                handleChange={(e) =>
+
+                                    setMetaData("dob", e.target.value)
+                                }
+                            />
+                        </Field>
+
+                        <Field
+                            label="occupation"
+                            value="Occupation:"
+                            errors={metaErrors.occupation}
+                        >
+                            <TextInput
+                                name="occupation"
+                                value={metaData.occupation}
+                                maxLength={25}
+                                handleChange={(e) =>
+                                    setMetaData("occupation", e.target.value)
+                                }
+                            />
+                        </Field>
+
+                        <Field
+                            label="emergency_contact"
+                            value="Emergency Contact Person:"
+                            errors={metaErrors.emergency_contact}
+                        >
+                            <TextInput
+                                name="emergency_contact"
+                                type="emergency_contact"
+                                value={metaData.emergency_contact}
+                                maxLength={50}
+                                handleChange={(e) =>
+                                    setMetaData("emergency_contact", e.target.value)
+                                }
+                            />
+                        </Field>
+
+                        <Field
+                            label="emergency_contact_phone"
+                            value="Emergency Contact Phone:"
+                            errors={metaErrors.emergency_contact_phone}
+                        >
+                            <TextInput
+                                name="emergency_contact_phone"
+                                type="emergency_contact_phone"
+                                value={metaData.emergency_contact_phone}
+                                maxLength={50}
+                                handleChange={(e) =>
+                                    setMetaData("emergency_contact_phone", e.target.value)
+                                }
+                            />
+                        </Field>
+
+                        <Field
+                            label="medicare_card_number"
+                            value="Medicare Card Number:"
+                            errors={metaErrors.medicare_card_number}
+                        >
+                            <TextInput
+                                name="medicare_card_number"
+                                type="medicare_card_number"
+                                value={metaData.medicare_card_number}
+                                maxLength={50}
+                                handleChange={(e) =>
+                                    setMetaData("medicare_card_number", e.target.value)
+                                }
+                            />
+                        </Field>
+
+
+                        <Field
+                            label="medicare_card_id"
+                            value="Medicare Card Person ID:"
+                            errors={metaErrors.medicare_card_id}
+                        >
+                            <TextInput
+                                name="medicare_card_id"
+                                type="medicare_card_id"
+                                value={metaData.medicare_card_id}
+                                maxLength={50}
+                                handleChange={(e) =>
+                                    setMetaData("medicare_card_id", e.target.value)
+                                }
+                            />
+                        </Field>
+
+                        <Field
+                            label="private_health_care"
+                            value="Private Health Care:"
+                            errors={metaErrors.private_health_care}
+                        >
+                            <SelectInput
+                                name="private_health_care"
+                                value={metaData.private_health_care}
+                                onChange={(e) =>
+                                    setMetaData("private_health_care", e.target.value)
+                                }
+                            >
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </SelectInput>
+                        </Field>
+
+                    </div>
+                    <div className="flex items-center px-8 py-4 bg-gray-100 border-t border-gray-200">
+                        <LoadingButton
+                            processing={metaProcessing}
+                            type="submit"
+                            className="ml-auto btn-indigo"
+                        >
+                            Update Additional Details
+                        </LoadingButton>
+                    </div>
+                </form>
+            </div>)}
+
+            { data.role == 'Doctor' && (<div className="max-w-3xl overflow-hidden bg-white rounded shadow">
+                <h2 className="px-8 pt-4 text-xl font-bold">Additional Details</h2>
+                <form onSubmit={handleAdditionalDetailsSubmit}>
+                    <div className="flex flex-wrap p-8 -mb-8 -mr-6">
+                        <Field
+                            label="speciality"
+                            value="Speciality:"
+                            errors={metaErrors.speciality}
+                        >
+                            <SelectInput
+                                name="speciality"
+                                value={metaData.speciality}
+                                onChange={(e) =>
+                                    setMetaData("speciality", e.target.value)
+                                }
+                            >
+                                <option value="General Practitioner">General Practitioner</option>
+                                <option value="Oncologist">Oncologist</option>
+                                <option value="Diabetologist">Diabetologist</option>
+                                <option value="Cardiologist">Cardiologist</option>
+                                <option value="Gynecologist">Gynecologist</option>
+                            </SelectInput>
+                        </Field>
+
+                        <Field
+                            label="registration_no"
+                            value="Registration No:"
+                            errors={metaErrors.registration_no}
+                        >
+                            <TextInput
+                                name="registration_no"
+                                value={metaData.registration_no}
+                                maxLength={25}
+                                handleChange={(e) =>
+                                    setMetaData("registration_no", e.target.value)
+                                }
+                            />
+                        </Field>
+
+                    </div>
+                    <div className="flex items-center px-8 py-4 bg-gray-100 border-t border-gray-200">
+                        <LoadingButton
+                            processing={metaProcessing}
+                            type="submit"
+                            className="ml-auto btn-indigo"
+                        >
+                            Update Additional Details
+                        </LoadingButton>
+                    </div>
+                </form>
+            </div>)}
         </>
     );
 };
