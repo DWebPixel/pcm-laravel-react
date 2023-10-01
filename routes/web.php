@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\ConsentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\ImagesController;
 use App\Http\Controllers\OrganizationsController;
 use App\Http\Controllers\PatientsController;
@@ -50,6 +52,12 @@ Route::middleware('auth')->group(function () {
 
     // Reports
     Route::get('reports', [ReportsController::class, 'index'])->name('reports');
+
+    Route::prefix('doctor')->name('doctor.')->group(function() {
+        Route::get('request-consent', [DoctorController::class, 'requestConsent'])->name('request-consent');
+        Route::post('store-consent', [ConsentController::class, 'store'])->name('store-consent');
+        Route::get('connected-patients', [DoctorController::class, 'connectedPatients'])->name('connected-patients');
+    });
 });
 
 // Images
