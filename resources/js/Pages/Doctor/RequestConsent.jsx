@@ -9,7 +9,7 @@ import InputError from "@/Shared//InputError";
 import Checkbox from "@/Shared/Checkbox";
 
 const RequestConsent = () => {
-    const { data, setData, errors, post, processing} = useForm({
+    const { data, setData, errors, post, processing, reset} = useForm({
         patient_address: "",
         access_type: "Read",
         purpose: {
@@ -66,7 +66,11 @@ const RequestConsent = () => {
     function handleSubmit(e) {
         e.preventDefault();
         console.log(data);
-        post(route("doctor.store-consent"));
+        post(route("doctor.store-consent"), {
+            onSuccess: () => {
+                reset();
+            },
+        });
     }
 
     const handleCheckboxChange = (type) => {
