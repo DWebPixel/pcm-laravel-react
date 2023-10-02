@@ -17,4 +17,59 @@ class Consent extends Model
         'revoked_on' => 'datetime',
         'expiry_date' => 'datetime',
     ];
+
+    public function patient()
+    {
+        return $this->belongsTo(User::class, 'requestee_id');
+    }
+
+    public function requestor()
+    {
+        return $this->belongsTo(User::class, 'requestor_id');
+    }
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class, 'organization_id');
+    }
+
+    public function scopeWaiting($query)
+    {
+        $query->whereStatus('waiting');
+    }
+
+    public function scopeGranted($query)
+    {
+        $query->whereStatus('granted');
+    }
+
+    public function scopeDenied($query)
+    {
+        $query->whereStatus('denied');
+    }
+
+    public function scopeRevoked($query)
+    {
+        $query->whereStatus('revoked');
+    }
+
+    public function getRequestedPurposeAttribute() {
+        return $this->filterRequestedPurpose($this->purpose);
+    }
+
+    public function filterRequestedPurpose($purpose) {
+        // Convert the JSON string to an associative array
+        $data = json_decode($purpose, true);
+
+        // Filter out items with value as true
+        $filteredData = array_filter($data, function ($value) {
+            return $value === true;
+        });
+
+        // Convert the filtered data back to JSON
+        $filteredJson = json_encode($filteredData);
+
+        // Output the filtered JSON
+        return array_keys($filteredData);
+    }
 }

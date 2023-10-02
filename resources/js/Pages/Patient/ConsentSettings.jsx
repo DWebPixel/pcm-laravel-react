@@ -1,17 +1,17 @@
 import Layout from "@/Shared/Layout";
 import { Head, usePage } from "@inertiajs/react";
 
-const ConnectedPatients = () => {
+const ConsentSettings = () => {
     const {user} = usePage().props;
 
     return (
         <>
             <Head title="Connected Patients" />
-            <h1 className="mb-8 text-3xl font-bold">Connected Patients</h1>
+            <h1 className="mb-8 text-3xl font-bold">Consent Settings</h1>
         </>
     );
 };
 
-ConnectedPatients.layout = (page) => <Layout children={page} />;
+ConsentSettings.layout = (page) => <Layout children={page} />;
 
-export default ConnectedPatients;
+export default ConsentSettings;

@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->hasMany(UserMeta::class);
     }
 
+    public function consents()
+    {
+        return $this->hasMany(Consent::class, 'requestee_id');
+    }
+
     public function getNameAttribute()
     {
         return $this->first_name.' '.$this->last_name;
