@@ -10,15 +10,6 @@ import DangerButton from "@/Shared/DangerButton";
 const ViewHealthRecords = () => {
     const { healthRecords, patient } = usePage().props;
     
-    const { dataForm, setData, errors, post, processing } = useForm({
-       
-    });
-
-    const revokeAccess = (id) => {
-        post(route('patient.update-consent', [id, 'revoked']));
-    }
-
-
     return (
         <>
             <Head title="Health Records" />
@@ -97,6 +88,6 @@ const ViewHealthRecords = () => {
     );
 };
 
-ViewHealthRecords.layout = (page) => <Layout title="Connected Patients" children={page} />;
+ViewHealthRecords.layout = (page) => <Layout title="Health Records" children={page} />;
 
 export default ViewHealthRecords;

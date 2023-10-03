@@ -51,7 +51,18 @@ class PatientController extends Controller
 
     public function healthRecords()
     {
-        return Inertia::render('Patient/HealthRecords', [ 'user' => auth()->user()]);
+        $healthRecords = auth()->user()->healthRecords()->paginate(10)->through(fn ($record) => [
+            'id' => $record->id,
+            'organization' => $record->creator->organizations()->first()->name,
+            'created_by' => $record->creator->name,
+            'role' => $record->creator->role,
+            'diagnosis' => $record->diagnosis,
+            'prescription' => $record->prescription,
+            'date_of_record' => $record->date_of_record,
+            'purpose' => $record->purposeFiltered,
+        ]);
+
+        return Inertia::render('Patient/HealthRecords', [ 'healthRecords' => $healthRecords]);
     }
 
     public function connectedEntities()
