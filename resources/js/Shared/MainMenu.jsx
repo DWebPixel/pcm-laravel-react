@@ -32,7 +32,7 @@ export default ({ className, onClick }) => {
             { auth.user.role == 'Patient' && 
                 ( <>
                     <MainMenuItem text="Dashboard" link="dashboard" icon="dashboard" />
-                    <MainMenuItem text="Connected Doctors" link="patient.connected-doctors" icon="users" />
+                    <MainMenuItem text="Connected Entities" link="patient.connected-entities" icon="users" />
                     <MainMenuItem text="Consent Requests" link="patient.index-consents" icon="printer" />
                     <MainMenuItem text="Health Records" link="patient.index-health-records" icon="printer" />
                     <MainMenuItem text="Consent Settings" link="patient.consent-settings" icon="printer" />

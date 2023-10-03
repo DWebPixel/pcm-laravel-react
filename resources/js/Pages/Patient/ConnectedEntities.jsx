@@ -7,26 +7,23 @@ import AnchorLink from "@/Shared/AnchorLink";
 import LoadingButton from "@/Shared/LoadingButton";
 import DangerButton from "@/Shared/DangerButton";
 
-const ConsentRequests = () => {
-    const { requests } = usePage().props;
-    const { data, links } = requests;
+const ConnectedEntities = () => {
+    const { connectedEntities } = usePage().props;
+    const { data, links } = connectedEntities;
 
     const { dataForm, setData, errors, post, processing } = useForm({
        
     });
 
-    const grantPermission = (id) => {
-        post(route('patient.update-consent', [id, 'granted']));
+    const revokeAccess = (id) => {
+        post(route('patient.update-consent', [id, 'revoked']));
     }
 
-    const denyPermission = (id) => {
-        post(route('patient.update-consent', [id, 'denied']))
-    }
 
     return (
         <>
             <Head title="Patients" />
-            <h1 className="mb-8 text-3xl font-bold">Consent Requests</h1>
+            <h1 className="mb-8 text-3xl font-bold">Connected Entities</h1>
             <div className="overflow-x-auto bg-white rounded shadow">
                 <table className="w-full whitespace-nowrap">
                     <thead>
@@ -34,9 +31,8 @@ const ConsentRequests = () => {
                             <th className="px-6 pt-5 pb-4">Requestor Name</th>
                             <th className="px-6 pt-5 pb-4">Organization</th>
                             <th className="px-6 pt-5 pb-4">Role</th>
-                            <th className="px-6 pt-5 pb-4">Access Type</th>
-                            <th className="px-6 pt-5 pb-4">Purpose</th>
-                            <th className="px-6 pt-5 pb-4">Requested On</th>
+                            <th className="px-6 pt-5 pb-4">Granted Access Type</th>
+                            <th className="px-6 pt-5 pb-4">Granted Purpose</th>
                             <th className="px-6 pt-5 pb-4">
                                 Actions
                             </th>
@@ -49,8 +45,8 @@ const ConsentRequests = () => {
                                 requestor_name,
                                 organization,
                                 role,
-                                access_type,
-                                purpose,
+                                granted_access_type,
+                                granted_purpose,
                                 requested_at,
                             }) => (
                                 <tr
@@ -67,29 +63,26 @@ const ConsentRequests = () => {
                                         {role}
                                     </td>
                                     <td className="border-t px-6">
-                                        {access_type}
+                                        {granted_access_type}
                                     </td>
                                     <td className="border-t px-6">
-                                        {purpose.map((item, index) => <p key={index}>{item}</p>)}
-                                    </td>
-                                    <td className="border-t px-6">
-                                        {requested_at}
+                                        {granted_purpose.map((item, index) => <p key={index}>{item}</p>)}
                                     </td>
                                     <td className="border-t px-6 flex gap-2 items-center h-full">
-                                        <LoadingButton
+                                        {/* <LoadingButton
                                             onClick={() => grantPermission(id)}
                                             type="button"
                                             processing={processing}
                                         >
-                                            Grant
-                                        </LoadingButton>
+                                            Edit Access
+                                        </LoadingButton> */}
                                         <DangerButton
                                             className="py-3 px-6"
                                             processing={processing}
                                             type="button"
-                                            onClick={() => denyPermission(id)}
+                                            onClick={() => revokeAccess(id)}
                                         >
-                                            Deny
+                                            Revoke Access
                                         </DangerButton>
                                     </td>
                                 </tr>
@@ -98,7 +91,7 @@ const ConsentRequests = () => {
                         {data.length === 0 && (
                             <tr>
                                 <td className="px-6 py-4 border-t" colSpan="7">
-                                    No consent requests found.
+                                    No connected entities found.
                                 </td>
                             </tr>
                         )}
@@ -110,6 +103,6 @@ const ConsentRequests = () => {
     );
 };
 
-ConsentRequests.layout = (page) => <Layout title="Consent Requests" children={page} />;
+ConnectedEntities.layout = (page) => <Layout title="Connected Doctors" children={page} />;
 
-export default ConsentRequests;
+export default ConnectedEntities;

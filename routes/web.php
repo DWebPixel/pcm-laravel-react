@@ -64,7 +64,7 @@ Route::middleware('auth')->group(function () {
         Route::get('consent-requests', [PatientController::class, 'consentRequests'])->name('index-consents');
         Route::post('consent-requests/{consent}/update-status/{status}', [PatientController::class, 'updateConsent'])->name('update-consent');
         Route::get('health-records', [PatientController::class, 'healthRecords'])->name('index-health-records');
-        Route::get('connected-doctors', [PatientController::class, 'connectedDoctors'])->name('connected-doctors');
+        Route::get('connected-entities', [PatientController::class, 'connectedEntities'])->name('connected-entities');
         Route::get('consent-settings', [PatientController::class, 'consentSettings'])->name('consent-settings');
     });
 });

@@ -54,10 +54,14 @@ class Consent extends Model
     }
 
     public function getRequestedPurposeAttribute() {
-        return $this->filterRequestedPurpose($this->purpose);
+        return $this->filterPurpose($this->purpose);
     }
 
-    public function filterRequestedPurpose($purpose) {
+    public function getGrantedPurposeFilteredAttribute() {
+        return $this->filterPurpose($this->granted_purpose);
+    }
+
+    public function filterPurpose($purpose) {
         // Convert the JSON string to an associative array
         $data = json_decode($purpose, true);
 
