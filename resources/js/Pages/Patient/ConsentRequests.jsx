@@ -75,7 +75,8 @@ const ConsentRequests = () => {
                                     <td className="border-t px-6">
                                         {requested_at}
                                     </td>
-                                    <td className="border-t px-6 flex gap-2 items-center h-full">
+                                    <td className="border-t px-6">
+                                        <div className="flex gap-2 items-center h-full">
                                         <LoadingButton
                                             onClick={() => grantPermission(id)}
                                             type="button"
@@ -91,6 +92,7 @@ const ConsentRequests = () => {
                                         >
                                             Deny
                                         </DangerButton>
+                                        </div>
                                     </td>
                                 </tr>
                             )

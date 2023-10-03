@@ -61,7 +61,10 @@ class User extends Authenticatable
 
     public function consents()
     {
-        return $this->hasMany(Consent::class, 'requestee_id');
+        if( $this->role == 'Patient' ) {
+            return $this->hasMany(Consent::class, 'requestee_id');
+        }
+        return $this->hasMany(Consent::class, 'requestor_id');
     }
 
     public function getNameAttribute()

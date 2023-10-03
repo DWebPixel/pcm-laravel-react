@@ -54,6 +54,21 @@ class DoctorController extends Controller
 
     public function connectedPatients()
     {
-        return Inertia::render('Doctor/ConnectedPatients', [ 'user' => auth()->user()]);
+        $connectedPatients = auth()->user()->consents()->Granted()
+        ->paginate(10)
+        ->withQueryString()
+        ->through(fn ($consent) => [
+            'id' => $consent->id,
+            'patient_name' => $consent->patient->name,
+            'bc_address' => $consent->patient->bc_address,
+            'address' => $consent->patient->address,
+            'access_type' => $consent->access_type,
+            'granted_access_type' => $consent->granted_access_type,
+            'purpose' => $consent->requestedPurpose,
+            'granted_purpose' => $consent->grantedPurposeFiltered,
+            'requested_at' => $consent->created_at->format('Y-m-d H:i:s'),
+        ]);
+
+        return Inertia::render('Doctor/ConnectedPatients', [ 'connectedPatients' => $connectedPatients]);
     }
 }

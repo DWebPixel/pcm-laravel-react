@@ -68,7 +68,7 @@ const ConnectedEntities = () => {
                                     <td className="border-t px-6">
                                         {granted_purpose.map((item, index) => <p key={index}>{item}</p>)}
                                     </td>
-                                    <td className="border-t px-6 flex gap-2 items-center h-full">
+                                    <td className="border-t px-6">
                                         {/* <LoadingButton
                                             onClick={() => grantPermission(id)}
                                             type="button"
@@ -76,6 +76,7 @@ const ConnectedEntities = () => {
                                         >
                                             Edit Access
                                         </LoadingButton> */}
+                                         <div className="flex gap-2 items-center h-full">
                                         <DangerButton
                                             className="py-3 px-6"
                                             processing={processing}
@@ -84,6 +85,7 @@ const ConnectedEntities = () => {
                                         >
                                             Revoke Access
                                         </DangerButton>
+                                        </div>
                                     </td>
                                 </tr>
                             )
