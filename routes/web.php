@@ -58,6 +58,9 @@ Route::middleware('auth')->group(function () {
         Route::get('request-consent', [DoctorController::class, 'requestConsent'])->name('request-consent');
         Route::post('store-consent', [DoctorController::class, 'storeConsent'])->name('store-consent');
         Route::get('connected-patients', [DoctorController::class, 'connectedPatients'])->name('connected-patients');
+        Route::get('connected-patients/{patient}/{consent}/create-record', [DoctorController::class, 'createHealthRecord'])->name('create-health-record');
+        Route::post('connected-patients/{patient}/{consent}/store-record', [DoctorController::class, 'storeHealthRecord'])->name('store-health-record');
+        Route::get('connected-patients/{patient}/{consent}/view-records', [DoctorController::class, 'viewHealthRecords'])->name('view-health-records');
     });
 
     Route::prefix('patient')->name('patient.')->group(function() {

@@ -42,6 +42,7 @@ const ConnectedPatients = () => {
                         {data.map(
                             ({
                                 id,
+                                patient_id,
                                 patient_name,
                                 bc_address,
                                 address,
@@ -73,17 +74,18 @@ const ConnectedPatients = () => {
                                         <AnchorLink
                                             className="focus:outline-none"
                                             style="btn"
-                                            href={route("organizations.create")}
+                                            href={route("doctor.view-health-records", [patient_id, id])}
                                         >
                                             <span>View Records</span>
                                         </AnchorLink>
-                                        <AnchorLink
+                                        { granted_access_type == 'Write' && <AnchorLink
                                             className="focus:outline-none"
                                             style="btn"
-                                            href={route("organizations.create")}
+                                            href={route("doctor.create-health-record", [patient_id, id])}
                                         >
                                             <span>Add Record</span>
                                         </AnchorLink>
+                                        }
                                     </div>
                                     </td>
                                 </tr>

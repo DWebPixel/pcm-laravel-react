@@ -59,6 +59,7 @@ class DoctorController extends Controller
         ->withQueryString()
         ->through(fn ($consent) => [
             'id' => $consent->id,
+            'patient_id' => $consent->patient->id,
             'patient_name' => $consent->patient->name,
             'bc_address' => $consent->patient->bc_address,
             'address' => $consent->patient->address,
@@ -69,6 +70,57 @@ class DoctorController extends Controller
             'requested_at' => $consent->created_at->format('Y-m-d H:i:s'),
         ]);
 
+        //dd($connectedPatients);
+
         return Inertia::render('Doctor/ConnectedPatients', [ 'connectedPatients' => $connectedPatients]);
+    }
+
+    public function createHealthRecord(User $patient, Consent $consent, Request $request)
+    {
+        return Inertia::render('Doctor/CreateHealthRecord', [ 'patient' => $patient, 'granted_purpose' => $consent->grantedPurposeFiltered, 'consent' => $consent]);
+    }
+
+    public function storeHealthRecord(User $patient, Consent $consent, Request $request)
+    {
+        FacadesRequest::validate([
+            'diagnosis' => ['required', 'max:200'],
+            'prescription' => ['required'],
+            'date_of_record' => ['required'],
+            'purpose' => ['required'],
+        
+        ]);
+
+        $record = $patient->healthRecords()->create([
+            'created_by' => auth()->id(),
+            'diagnosis' => $request->diagnosis,
+            'prescription' => $request->prescription,
+            'date_of_record' => $request->date_of_record,
+            'purpose' => json_encode($request->purpose),
+        ]);
+
+        //$photo_path  = FacadesRequest::file('photo') ? FacadesRequest::file('photo')->store('health-records') : null;
+
+        //dd($photo_path);
+
+        return Redirect::route('doctor.view-health-records', [$patient, $consent])->with('success', 'Record Successfully created!.');
+
+    }
+
+    public function viewHealthRecords(User $patient, Consent $consent, Request $request)
+    {
+        $healthRecords = $patient->healthRecords()->get()->filter(function($record) use ($consent) {
+            return array_intersect($record->purposeFiltered, $consent->grantedPurposeFiltered);
+        })->transform(fn ($record) => [
+            'id' => $record->id,
+            'organization' => $record->creator->organizations()->first()->name,
+            'created_by' => $record->creator->name,
+            'role' => $record->creator->role,
+            'diagnosis' => $record->diagnosis,
+            'prescription' => $record->prescription,
+            'date_of_record' => $record->date_of_record,
+            'purpose' => $record->purposeFiltered,
+        ])->toArray();
+        
+        return Inertia::render('Doctor/ViewHealthRecords', [ 'healthRecords' => array_values($healthRecords), 'patient' => $patient]);
     }
 }

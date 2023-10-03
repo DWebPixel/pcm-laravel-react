@@ -20,9 +20,14 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
+    ];
+
+    protected $appends = [
+        'name',
     ];
 
     /**
@@ -66,6 +71,12 @@ class User extends Authenticatable
         }
         return $this->hasMany(Consent::class, 'requestor_id');
     }
+
+    public function healthRecords()
+    {
+        return $this->hasMany(HealthRecord::class, 'patient_id');
+    }
+
 
     public function getNameAttribute()
     {

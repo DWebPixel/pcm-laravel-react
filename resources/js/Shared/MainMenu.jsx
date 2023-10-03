@@ -6,7 +6,7 @@ export default ({ className, onClick }) => {
     const { auth } = usePage().props;
     return (
         <div className={className} onClick={onClick}>
-            { true && 
+            {  auth.user.role == 'Admin' && 
                 ( <>
                     <MainMenuItem text="Dashboard" link="dashboard" icon="dashboard" />
                     <MainMenuItem
