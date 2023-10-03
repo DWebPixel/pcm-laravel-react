@@ -51,7 +51,7 @@ class PatientController extends Controller
 
     public function healthRecords()
     {
-        $healthRecords = auth()->user()->healthRecords()->paginate(10)->through(fn ($record) => [
+        $healthRecords = auth()->user()->healthRecords()->with('files')->paginate(10)->through(fn ($record) => [
             'id' => $record->id,
             'organization' => $record->creator->organizations()->first()->name,
             'created_by' => $record->creator->name,
@@ -60,6 +60,7 @@ class PatientController extends Controller
             'prescription' => $record->prescription,
             'date_of_record' => $record->date_of_record,
             'purpose' => $record->purposeFiltered,
+            'files' => $record->files
         ]);
 
         return Inertia::render('Patient/HealthRecords', [ 'healthRecords' => $healthRecords]);

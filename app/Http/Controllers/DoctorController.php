@@ -90,17 +90,34 @@ class DoctorController extends Controller
         
         ]);
 
+        //create purpose. While file uploading it is coverting false to 0 and true to 1. Rever it back.
+        
+        $purpose = array_map(function($item){
+            if($item == "0") return false;
+            if($item == "1") return true;
+        }, $request->purpose);
+      
+
         $record = $patient->healthRecords()->create([
             'created_by' => auth()->id(),
             'diagnosis' => $request->diagnosis,
             'prescription' => $request->prescription,
             'date_of_record' => $request->date_of_record,
-            'purpose' => json_encode($request->purpose),
+            'purpose' => json_encode($purpose),
         ]);
 
-        //$photo_path  = FacadesRequest::file('photo') ? FacadesRequest::file('photo')->store('health-records') : null;
-
-        //dd($photo_path);
+        foreach($request->uploadedFiles as $file) {
+            if( $file['name']) {
+                $file_path  = $file['file']->store('health-records');
+                $hashValue = hash_file('sha256', $file['file']->path());
+                $record->files()->create([
+                    'name' => $file['name'],
+                    'type' => $file['type'],
+                    'path' => $file_path,
+                    'hash' => $hashValue,
+                ]);
+            } 
+        }
 
         return Redirect::route('doctor.view-health-records', [$patient, $consent])->with('success', 'Record Successfully created!.');
 
@@ -108,7 +125,7 @@ class DoctorController extends Controller
 
     public function viewHealthRecords(User $patient, Consent $consent, Request $request)
     {
-        $healthRecords = $patient->healthRecords()->get()->filter(function($record) use ($consent) {
+        $healthRecords = $patient->healthRecords()->with('files')->get()->filter(function($record) use ($consent) {
             return array_intersect($record->purposeFiltered, $consent->grantedPurposeFiltered);
         })->transform(fn ($record) => [
             'id' => $record->id,
@@ -119,7 +136,10 @@ class DoctorController extends Controller
             'prescription' => $record->prescription,
             'date_of_record' => $record->date_of_record,
             'purpose' => $record->purposeFiltered,
+            'files' => $record->files
         ])->toArray();
+
+        //dd($healthRecords);
         
         return Inertia::render('Doctor/ViewHealthRecords', [ 'healthRecords' => array_values($healthRecords), 'patient' => $patient]);
     }

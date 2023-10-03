@@ -15,10 +15,9 @@ const CreateHealthRecord = () => {
         diagnosis: "",
         prescription: "",
         date_of_record: "",
-        photo: "",
-        files: [{
+        uploadedFiles: [{
             name: "",
-            type: "",
+            type: "PROM",
             file: ""
         }],
         purpose: {
@@ -100,6 +99,85 @@ const CreateHealthRecord = () => {
 
       };
 
+    const handleFileInputChange = (index, field, value) => {
+        let temp = [...data['uploadedFiles']];
+        temp[index][field] = value;
+        console.log(temp);
+        setData('uploadedFiles', temp)
+    };  
+      
+    function multipleFileUploads() {
+        return (
+            <>
+                { data.uploadedFiles.map((file, index) => {
+                    return (
+                        <div key={index} className="w-full flex">
+                            <div className="w-1/3 pb-7 pr-6">
+                                <InputLabel
+                                    forInput="file_name"
+                                    value="File Name:"
+                                />
+                                <TextInput
+                                    name="file_name"
+                                    value={data.uploadedFiles[index].name}
+                                    handleChange={(e) =>
+                                        handleFileInputChange(index,'name', e.target.value)
+                                    }
+                                />
+                            </div>
+                            <div className="w-1/3 pb-7 pr-6">
+                                <InputLabel
+                                    forInput="file_type"
+                                    value="File Type:"
+                                />
+                                <SelectInput
+                                    name="file_type"
+                                    value={data.uploadedFiles[index].type}
+                                    onChange={(e) =>
+                                        handleFileInputChange(index,'type', e.target.value)
+                                    }
+                                >
+                                    <option value="PROM">PROM</option>
+                                    <option value="EVENT SUMMARY">EVENT SUMMARY</option>
+                                    <option value="DIAGNOSIS">DIAGNOSIS</option>
+                                    <option value="PATHOLOGY">PATHOLOGY</option>
+                                    <option value="RADIOLOGY">RADIOLOGY</option>
+                                    <option value="OTHER">OTHER</option>
+                                </SelectInput>
+                            </div>
+                            <div className="w-1/3">
+                                <FileInput
+                                    className="w-full pb-8 pr-6 lg:w-1/2"
+                                    label="Select File"
+                                    name="file"
+                                    accept="image/*"
+                                    errors={errors.file}
+                                    value={data.file}
+                                    onChange={(file) => handleFileInputChange(index,'file', file)}
+                                />
+                            </div>
+                        </div>
+                    )
+                })}
+                <button
+                    type="button"
+                    className="mb-10 px-4 py-1 text-xs font-medium text-white bg-gray-500 rounded-sm focus:outline-none hover:bg-gray-700"
+                    onClick={() => {
+                        setData('uploadedFiles', [
+                            ...data['uploadedFiles'],
+                            {
+                                name: "",
+                                type: "PROM",
+                                file: ""
+                            }
+                        ])
+                    }}
+                >
+                    Add More
+                </button>
+            </>
+        )
+    }  
     return (
         <>
             <Head title="Create Health Record" />
@@ -325,17 +403,8 @@ const CreateHealthRecord = () => {
                             <InputError message={errors.purpose} />
                         </div>
                         
-                                                
+                        { multipleFileUploads() }                         
 
-                        {/* <FileInput
-                            className="w-full pb-8 pr-6 lg:w-1/2"
-                            label="Photo"
-                            name="photo"
-                            accept="image/*"
-                            errors={errors.photo}
-                            value={data.photo}
-                            onChange={(photo) => setData("photo", photo)}
-                        /> */}
                     </div>
                     <div className="flex items-center justify-end px-8 py-4 bg-gray-100 border-t border-gray-200">
                         <LoadingButton

@@ -10,6 +10,8 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PatientsController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UsersController;
+use App\Models\HealthRecord;
+use App\Models\HealthRecordFiles;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -76,3 +78,22 @@ Route::middleware('auth')->group(function () {
 Route::get('/img/{path}', [ImagesController::class, 'show'])
     ->where('path', '.*')
     ->name('image');
+
+Route::get("/validate_health_record_file", function() {
+    
+    $record = HealthRecordFiles::find(request()->id);
+    if(!$record) return "Record not found!";
+
+    $path  = asset($record->file_url);
+    echo $path;
+    echo "<br/>";
+    $currentHash = hash_file('sha256', $path);
+    $storedHash = $record->hash;
+
+    echo "Current Hash: " . $currentHash; 
+    echo "<br/>";
+    echo "Stored Hash: " . $storedHash;
+    echo "<br/>";
+    echo "<br/>";
+    return $currentHash == $storedHash ? "Hash Matched!" : "Hash Didn't Match!";
+});

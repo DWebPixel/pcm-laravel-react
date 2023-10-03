@@ -56,13 +56,13 @@ export default ({ className, name, label, accept, errors = [], onChange }) => {
                 />
                 {!file && <Button text="Browse" onClick={browse} />}
                 {file && (
-                    <div className="flex items-center justify-between p-2">
-                        <div className="flex-1 pr-1">
+                    <div className="flex items-center justify-between">
+                        {/* <div className="flex-1 pr-1">
                             {file.name}
                             <span className="ml-1 text-xs text-gray-600">
                                 ({filesize(file.size)})
                             </span>
-                        </div>
+                        </div> */}
                         <Button text="Remove" onClick={remove} />
                     </div>
                 )}

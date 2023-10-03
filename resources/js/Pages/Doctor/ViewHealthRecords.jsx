@@ -40,10 +40,11 @@ const ViewHealthRecords = () => {
                                 prescription,
                                 date_of_record,
                                 purpose,
+                                files
                             }) => (
                                 <tr
                                     key={id}
-                                    className="hover:bg-gray-100 focus-within:bg-gray-100"
+                                    className="hover:bg-gray-100 focus-within:bg-gray-100 h-[50px]"
                                 >
                                     <td className="border-t px-6">
                                         {organization}
@@ -64,11 +65,13 @@ const ViewHealthRecords = () => {
                                         {prescription}
                                     </td>
                                     <td className="border-t px-6">
-                                    <div className="">
-                                        <a href="" className="block text-indigo-500" >File 1</a>
-                                        <a href="" className="block text-indigo-500" >File 2</a>
-                                        <a href="" className="block text-indigo-500" >File 3</a>
-                                    </div>
+                                        <div className="">
+                                            { files.map( (file) => {
+                                                return (
+                                                    <a href={file.file_url} target="_blank" key={file.id} className="block cursor-pointer text-indigo-500" >{ file.name }</a>
+                                                );
+                                            }) }
+                                        </div>
                                     </td>
                                 </tr>
                             )

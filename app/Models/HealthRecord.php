@@ -19,6 +19,11 @@ class HealthRecord extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    public function files()
+    {
+        return $this->hasMany(HealthRecordFiles::class);
+    }
+
     public function getPurposeFilteredAttribute() {
         return $this->filterPurpose($this->purpose);
     }
