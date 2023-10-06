@@ -20,9 +20,7 @@ class DoctorController extends Controller
 
     public function storeConsent(Request $request): RedirectResponse
     {
-        $requestor_id = auth()->id();
-
-        $requestor = User::find($requestor_id);
+        $requestor = auth()->user();
 
         FacadesRequest::validate([
             'patient_address' => ['required', 'max:120', 'exists:users,bc_address'],
@@ -36,18 +34,21 @@ class DoctorController extends Controller
 
         $patient = User::where('bc_address', $request->patient_address)->first();
        
-        Consent::create([
-            'requestor_id' => $requestor_id,
+        $org_id =  $requestor->organizations()->first()->id;
+        $consent = Consent::create([
+            'requestor_id' => $requestor->id,
             'requestor_address' => $requestor->bc_address, 
             'requestee_id' => $patient->id,
             'requestee_address' => $patient->bc_address, 
-            'organization_id' => $requestor->organizations()->first()->id,
+            'organization_id' =>  $org_id,
             'role' => $requestor->role,
             'access_type' => $request->access_type,
             'purpose' => json_encode($request->purpose),
             'expiry_date' => Carbon::now()->addMonth()
         ]);
-
+       
+        $message = "$requestor->name requested consent from $patient->name";
+        addLog($patient->id, $requestor->id, $org_id, 'request_consent', $message, json_encode($consent));
        
         return Redirect::back()->with('success', 'Consent request sent.');
     }
@@ -142,5 +143,10 @@ class DoctorController extends Controller
         //dd($healthRecords);
         
         return Inertia::render('Doctor/ViewHealthRecords', [ 'healthRecords' => array_values($healthRecords), 'patient' => $patient]);
+    }
+
+    public function viewLogs() {
+        $logs = auth()->user()->logs()->latest()->get();
+        return Inertia::render('Doctor/ViewLogs', [ 'logs' => $logs]);
     }
 }

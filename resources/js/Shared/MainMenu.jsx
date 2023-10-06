@@ -25,6 +25,7 @@ export default ({ className, onClick }) => {
                     <MainMenuItem text="Dashboard" link="dashboard" icon="dashboard" />
                     <MainMenuItem text="Connected Patients" link="doctor.connected-patients" icon="users" />
                     <MainMenuItem text="Request Consent" link="doctor.request-consent" icon="printer" />
+                    <MainMenuItem text="View Logs" link="doctor.view-logs" icon="printer" />
                 </>
                 )
             }
@@ -36,6 +37,7 @@ export default ({ className, onClick }) => {
                     <MainMenuItem text="Consent Requests" link="patient.index-consents" icon="printer" />
                     <MainMenuItem text="Health Records" link="patient.index-health-records" icon="printer" />
                     <MainMenuItem text="Consent Settings" link="patient.consent-settings.index" icon="printer" />
+                    <MainMenuItem text="View Logs" link="patient.view-logs" icon="printer" />
                 </>
                 )
             }

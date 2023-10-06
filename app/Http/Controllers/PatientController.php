@@ -45,6 +45,12 @@ class PatientController extends Controller
         }
         $consent->update($update_array);
 
+        $patient = $consent->patient;
+        $requestor = $consent->requestor;
+
+        $message = "$patient->name $status consent to $requestor->name";
+        addLog($patient->id, $requestor->id, $consent->organization_id, 'change_consent_status', $message, json_encode($consent));
+
         if($status == 'revoked') {
             return to_route('patient.connected-entities')->with('success', 'Access revoked!');
         }
@@ -85,5 +91,10 @@ class PatientController extends Controller
             'requested_at' => $consent->created_at->format('Y-m-d H:i:s'),
         ]);
         return Inertia::render('Patient/ConnectedEntities', [ 'connectedEntities' => $connectedEntities]);
+    }
+
+    public function viewLogs() {
+        $logs = auth()->user()->logs()->latest()->get();
+        return Inertia::render('Doctor/ViewLogs', [ 'logs' => $logs]);
     }
 }

@@ -77,6 +77,14 @@ class User extends Authenticatable
         return $this->hasMany(HealthRecord::class, 'patient_id');
     }
 
+    public function logs()
+    {
+        if( $this->role == 'Patient' ) {
+            return $this->hasMany(Log::class, 'patient_id');
+        }
+        return $this->hasMany(Log::class, 'user_id');
+    }
+
     public function consentSettings()
     {
         return $this->hasMany(ConsentSetting::class, 'patient_id');

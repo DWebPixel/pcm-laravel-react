@@ -64,6 +64,7 @@ Route::middleware('auth')->group(function () {
         Route::get('connected-patients/{patient}/{consent}/create-record', [DoctorController::class, 'createHealthRecord'])->name('create-health-record');
         Route::post('connected-patients/{patient}/{consent}/store-record', [DoctorController::class, 'storeHealthRecord'])->name('store-health-record');
         Route::get('connected-patients/{patient}/{consent}/view-records', [DoctorController::class, 'viewHealthRecords'])->name('view-health-records');
+        Route::get('logs', [DoctorController::class, 'viewLogs'])->name('view-logs');
     });
 
     Route::prefix('patient')->name('patient.')->group(function() {
@@ -75,6 +76,7 @@ Route::middleware('auth')->group(function () {
         Route::get('consent-settings/create', [ConsentSettingsController::class, 'create'])->name('consent-settings.create');
         Route::get('consent-settings/{setting}/edit', [ConsentSettingsController::class, 'edit'])->name('consent-settings.edit');
         Route::post('consent-settings/store', [ConsentSettingsController::class, 'store'])->name('consent-settings.store');
+        Route::get('logs', [PatientController::class, 'viewLogs'])->name('view-logs');
     });
 });
 

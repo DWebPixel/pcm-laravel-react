@@ -18,6 +18,10 @@ class Consent extends Model
         'expiry_date' => 'datetime',
     ];
 
+    protected $appends = [
+        'requested_purpose'
+    ];
+
     public function patient()
     {
         return $this->belongsTo(User::class, 'requestee_id');
