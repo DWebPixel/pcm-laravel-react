@@ -51,7 +51,7 @@ const ConnectedEntities = () => {
                             }) => (
                                 <tr
                                     key={id}
-                                    className="hover:bg-gray-100 focus-within:bg-gray-100"
+                                    className="hover:bg-gray-100 focus-within:bg-gray-100 h-[50px]"
                                 >
                                     <td className="border-t px-6">
                                         {requestor_name}

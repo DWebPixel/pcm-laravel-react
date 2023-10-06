@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ConsentController;
+use App\Http\Controllers\ConsentSettingsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\ImagesController;
@@ -56,7 +57,7 @@ Route::middleware('auth')->group(function () {
     // Reports
     Route::get('reports', [ReportsController::class, 'index'])->name('reports');
 
-    Route::prefix('doctor')->name('doctor.')->group(function() {
+    Route::prefix('user')->name('doctor.')->group(function() {
         Route::get('request-consent', [DoctorController::class, 'requestConsent'])->name('request-consent');
         Route::post('store-consent', [DoctorController::class, 'storeConsent'])->name('store-consent');
         Route::get('connected-patients', [DoctorController::class, 'connectedPatients'])->name('connected-patients');
@@ -70,7 +71,10 @@ Route::middleware('auth')->group(function () {
         Route::post('consent-requests/{consent}/update-status/{status}', [PatientController::class, 'updateConsent'])->name('update-consent');
         Route::get('health-records', [PatientController::class, 'healthRecords'])->name('index-health-records');
         Route::get('connected-entities', [PatientController::class, 'connectedEntities'])->name('connected-entities');
-        Route::get('consent-settings', [PatientController::class, 'consentSettings'])->name('consent-settings');
+        Route::get('consent-settings/index', [ConsentSettingsController::class, 'index'])->name('consent-settings.index');
+        Route::get('consent-settings/create', [ConsentSettingsController::class, 'create'])->name('consent-settings.create');
+        Route::get('consent-settings/{setting}/edit', [ConsentSettingsController::class, 'edit'])->name('consent-settings.edit');
+        Route::post('consent-settings/store', [ConsentSettingsController::class, 'store'])->name('consent-settings.store');
     });
 });
 

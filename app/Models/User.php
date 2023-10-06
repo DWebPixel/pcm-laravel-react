@@ -77,6 +77,11 @@ class User extends Authenticatable
         return $this->hasMany(HealthRecord::class, 'patient_id');
     }
 
+    public function consentSettings()
+    {
+        return $this->hasMany(ConsentSetting::class, 'patient_id');
+    }
+
 
     public function getNameAttribute()
     {

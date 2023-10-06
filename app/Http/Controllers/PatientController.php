@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Consent;
+use App\Models\ConsentSetting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 use Inertia\Inertia;
 
 class PatientController extends Controller
@@ -83,10 +85,5 @@ class PatientController extends Controller
             'requested_at' => $consent->created_at->format('Y-m-d H:i:s'),
         ]);
         return Inertia::render('Patient/ConnectedEntities', [ 'connectedEntities' => $connectedEntities]);
-    }
-
-    public function consentSettings()
-    {
-        return Inertia::render('Patient/ConsentSettings', [ 'user' => auth()->user()]);
     }
 }

@@ -9,7 +9,7 @@ import Logo from "@/Shared/Logo";
 export default function Login() {
     const { data, setData, post, processing, errors } = useForm({
         email: "johndoe@example.com",
-        password: "secret",
+        password: "Password@2023",
         remember: false,
     });
 

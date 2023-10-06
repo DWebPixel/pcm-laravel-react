@@ -20,7 +20,7 @@ export default ({ className, onClick }) => {
                 )
             }
 
-            { auth.user.role == 'Doctor' && 
+            { auth.user.role != 'Patient' && auth.user.role != 'Admin' && 
                 ( <>
                     <MainMenuItem text="Dashboard" link="dashboard" icon="dashboard" />
                     <MainMenuItem text="Connected Patients" link="doctor.connected-patients" icon="users" />
@@ -35,7 +35,7 @@ export default ({ className, onClick }) => {
                     <MainMenuItem text="Connected Entities" link="patient.connected-entities" icon="users" />
                     <MainMenuItem text="Consent Requests" link="patient.index-consents" icon="printer" />
                     <MainMenuItem text="Health Records" link="patient.index-health-records" icon="printer" />
-                    <MainMenuItem text="Consent Settings" link="patient.consent-settings" icon="printer" />
+                    <MainMenuItem text="Consent Settings" link="patient.consent-settings.index" icon="printer" />
                 </>
                 )
             }

@@ -20,6 +20,7 @@ const HealthRecords = () => {
                             <th className="px-6 pt-5 pb-4">Diagnosis</th>
                             <th className="px-6 pt-5 pb-4">Record Date</th>
                             <th className="px-6 pt-5 pb-4">Prescription</th>
+                            <th className="px-6 pt-5 pb-4">Purpose</th>
                             <th className="px-6 pt-5 pb-4">
                                 Documents
                             </th>
@@ -59,6 +60,9 @@ const HealthRecords = () => {
                                     </td>
                                     <td className="border-t px-6 max-w-[120px] whitespace-pre-wrap">
                                         {prescription}
+                                    </td>
+                                    <td className="border-t px-6">
+                                        {purpose.map((item, index) => <p key={index}>{item}</p>)}
                                     </td>
                                     <td className="border-t px-6">
                                     <div className="">

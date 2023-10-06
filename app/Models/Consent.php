@@ -9,7 +9,7 @@ class Consent extends Model
 {
     use HasFactory;
 
-    protected $guard = [];
+    protected $guarded = [];
 
     protected $casts = [
         'granted_on' => 'datetime',

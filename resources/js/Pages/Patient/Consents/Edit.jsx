@@ -1,4 +1,4 @@
-import { Link, useForm, Head, usePage } from "@inertiajs/react";
+import { Link, useForm, Head } from "@inertiajs/react";
 import Layout from "@/Shared/Layout";
 import LoadingButton from "@/Shared/LoadingButton";
 import TextInput from "@/Shared/TextInput";
@@ -8,18 +8,14 @@ import InputLabel from "@/Shared/InputLabel";
 import InputError from "@/Shared//InputError";
 import Checkbox from "@/Shared/Checkbox";
 
-const CreateHealthRecord = () => {
-    const { patient, granted_purpose, consent } = usePage().props;
-
+const Edit = () => {
     const { data, setData, errors, post, processing, reset} = useForm({
-        diagnosis: "",
-        prescription: "",
-        date_of_record: "",
-        uploadedFiles: [{
-            name: "",
-            type: "PROM",
-            file: ""
-        }],
+        roles: {
+            "Nurse": "None",
+            "Doctor": "None",
+            "Sales Agent": "None",
+            "Medical Representative": "None",
+        },
         purpose: {
             "GeneralPurpose": false,
             "Education": false,
@@ -38,12 +34,18 @@ const CreateHealthRecord = () => {
 
     function handleSubmit(e) {
         e.preventDefault();
-        console.log(data);
-        post(route("doctor.store-health-record", [patient.id, consent.id]), {
+        post(route("patient.store-consent-settings"), {
             onSuccess: () => {
                 reset();
             },
         });
+    }
+
+    const handleSelectChange = (role, access) => {
+        setData("roles", {
+            ...data["roles"],
+            [role]: access,
+          });
     }
 
     const handleCheckboxChange = (type) => {
@@ -56,16 +58,16 @@ const CreateHealthRecord = () => {
         if( type == 'GeneralPurpose' ) {
             setData("purpose", {
                 "GeneralPurpose": !currentState,
-                "Education": !granted_purpose.includes('Education') ? false : !currentState,
-                "E-Statistic": !granted_purpose.includes('E-Statistic') ? false : !currentState,
-                "E-MedicineDiscovery": !granted_purpose.includes('E-MedicineDiscovery') ? false : !currentState,
-                "MedicalTreatment": !granted_purpose.includes('MedicalTreatment') ? false : !currentState,
-                "M-Cancer": !granted_purpose.includes('M-Cancer') ? false : !currentState,
-                "M-Diabetic": !granted_purpose.includes('M-Diabetic') ? false : !currentState,
-                "M-Education": !granted_purpose.includes('M-Education') ? false : !currentState,
-                "M-Mental": !granted_purpose.includes('M-Mental') ? false : !currentState,
-                "Insurance": !granted_purpose.includes('Insurance') ? false : !currentState,
-                "I-EvaluatelnsuranceStatus": !granted_purpose.includes('I-EvaluatelnsuranceStatus') ? false : !currentState
+                "Education": !currentState,
+                "E-Statistic": !currentState,
+                "E-MedicineDiscovery": !currentState,
+                "MedicalTreatment": !currentState,
+                "M-Cancer": !currentState,
+                "M-Diabetic": !currentState,
+                "M-Education": !currentState,
+                "M-Mental": !currentState,
+                "Insurance": !currentState,
+                "I-EvaluatelnsuranceStatus": !currentState
             });
         }
 
@@ -73,8 +75,8 @@ const CreateHealthRecord = () => {
             setData("purpose", {
                 ...data["purpose"],
                 "Education": !currentState,
-                "E-Statistic": !granted_purpose.includes('E-Statistic') ? false : !currentState,
-                "E-MedicineDiscovery": !granted_purpose.includes('E-MedicineDiscovery') ? false : !currentState,
+                "E-Statistic": !currentState,
+                "E-MedicineDiscovery": !currentState,
             });
         }
 
@@ -82,10 +84,10 @@ const CreateHealthRecord = () => {
             setData("purpose", {
                 ...data["purpose"],
                 "MedicalTreatment": !currentState,
-                "M-Cancer": !granted_purpose.includes('M-Cancer') ? false : !currentState,
-                "M-Diabetic": !granted_purpose.includes('M-Diabetic') ? false : !currentState,
-                "M-Education": !granted_purpose.includes('M-Education') ? false : !currentState,
-                "M-Mental": !granted_purpose.includes('M-Mental') ? false : !currentState,
+                "M-Cancer": !currentState,
+                "M-Diabetic": !currentState,
+                "M-Education": !currentState,
+                "M-Mental": !currentState,
             });
         }
 
@@ -93,161 +95,28 @@ const CreateHealthRecord = () => {
             setData("purpose", {
                 ...data["purpose"],
                 "Insurance": !currentState,
-                "I-EvaluatelnsuranceStatus": !granted_purpose.includes('I-EvaluatelnsuranceStatus') ? false : !currentState
+                "I-EvaluatelnsuranceStatus": !currentState,
             });
         }
 
       };
 
-    const handleFileInputChange = (index, field, value) => {
-        let temp = [...data['uploadedFiles']];
-        temp[index][field] = value;
-        console.log(temp);
-        setData('uploadedFiles', temp)
-    };  
-      
-    function multipleFileUploads() {
-        return (
-            <>
-                { data.uploadedFiles.map((file, index) => {
-                    return (
-                        <div key={index} className="w-full flex">
-                            <div className="w-1/3 pb-7 pr-6">
-                                <InputLabel
-                                    forInput="file_name"
-                                    value="File Name:"
-                                />
-                                <TextInput
-                                    name="file_name"
-                                    value={data.uploadedFiles[index].name}
-                                    handleChange={(e) =>
-                                        handleFileInputChange(index,'name', e.target.value)
-                                    }
-                                />
-                            </div>
-                            <div className="w-1/3 pb-7 pr-6">
-                                <InputLabel
-                                    forInput="file_type"
-                                    value="File Type:"
-                                />
-                                <SelectInput
-                                    name="file_type"
-                                    value={data.uploadedFiles[index].type}
-                                    onChange={(e) =>
-                                        handleFileInputChange(index,'type', e.target.value)
-                                    }
-                                >
-                                    <option value="PROM">PROM</option>
-                                    <option value="EVENT SUMMARY">EVENT SUMMARY</option>
-                                    <option value="DIAGNOSIS">DIAGNOSIS</option>
-                                    <option value="PATHOLOGY">PATHOLOGY</option>
-                                    <option value="RADIOLOGY">RADIOLOGY</option>
-                                    <option value="OTHER">OTHER</option>
-                                </SelectInput>
-                            </div>
-                            <div className="w-1/3">
-                                <FileInput
-                                    className="w-full pb-8 pr-6 lg:w-1/2"
-                                    label="Select File"
-                                    name="file"
-                                    accept="image/*"
-                                    errors={errors.file}
-                                    value={data.file}
-                                    onChange={(file) => handleFileInputChange(index,'file', file)}
-                                />
-                            </div>
-                        </div>
-                    )
-                })}
-                <button
-                    type="button"
-                    className="mb-10 px-4 py-1 text-xs font-medium text-white bg-gray-500 rounded-sm focus:outline-none hover:bg-gray-700"
-                    onClick={() => {
-                        setData('uploadedFiles', [
-                            ...data['uploadedFiles'],
-                            {
-                                name: "",
-                                type: "PROM",
-                                file: ""
-                            }
-                        ])
-                    }}
-                >
-                    Add More
-                </button>
-            </>
-        )
-    }  
     return (
         <>
-            <Head title="Create Health Record" />
+            <Head title="Consent Settings" />
             <div>
                 <h1 className="mb-8 text-3xl font-bold">
-                    {/* <Link
-                        href={route("users.index")}
-                        className="text-indigo-600 hover:text-indigo-700"
-                    >
-                        Consents
-                    </Link> */}
-                    {/* <span className="font-medium text-indigo-600"> /</span>{" "} */}
-                    Create Health Record - {patient.name}
+                    Automatic Consent Settings
                 </h1>
             </div>
             <div className="max-w-3xl overflow-hidden bg-white rounded shadow">
-                <form name="CreateHealthRecordForm" onSubmit={handleSubmit}>
+                <form name="EditForm" onSubmit={handleSubmit}>
                     <div className="flex flex-wrap p-8 -mb-8 -mr-6">
+                        <div className="w-full pb-2 pr-6 text-lg font-semibold">Select generic permissions</div>            
                         <div className="w-full pb-7 pr-6">
-                            <InputLabel
-                                forInput="diagnosis"
-                                value="Diagnosis:"
-                            />
-                             <TextInput
-                                name="diagnosis"
-                                value={data.diagnosis}
-                                handleChange={(e) =>
-                                    setData("diagnosis", e.target.value)
-                                }
-                            />
-                            <InputError message={errors.patient_address} />
-                        </div>
-                        <div className="w-full pb-7 pr-6">
-                            <InputLabel
-                                forInput="prescription"
-                                value="Prescription:"
-                            />
-                             <TextInput
-                                name="prescription"
-                                value={data.prescription}
-                                handleChange={(e) =>
-                                    setData("prescription", e.target.value)
-                                }
-                            />
-                            <InputError message={errors.patient_address} />
-                        </div>
-                        <div className="w-full pb-7 pr-6">
-                            <InputLabel
-                                forInput="date_of_record"
-                                value="Date Of Record"
-                            />
-                             <TextInput
-                                type="date"
-                                name="date_of_record"
-                                value={data.date_of_record}
-                                handleChange={(e) =>
-                                    setData("date_of_record", e.target.value)
-                                }
-                            />
-                            <InputError message={errors.patient_address} />
-                        </div>
-                        <div className="w-full pb-7 pr-6">
-                            <InputLabel
-                                forInput="purpose"
-                                value="Purpose Type:"
-                            />
                             <Checkbox
                                 name="general_purpose"
                                 value={data.purpose.GeneralPurpose}
-                                disabled={!granted_purpose.includes('GeneralPurpose')}
                                 handleChange={(e) =>
                                     handleCheckboxChange('GeneralPurpose')
                                 }
@@ -261,7 +130,6 @@ const CreateHealthRecord = () => {
                                         <Checkbox
                                             name="education"
                                             value={data.purpose.Education}
-                                            disabled={!granted_purpose.includes('Education')}
                                             handleChange={(e) =>
                                                 handleCheckboxChange('Education')
                                             }
@@ -275,7 +143,6 @@ const CreateHealthRecord = () => {
                                             <Checkbox
                                                 name="e-statistic"
                                                 value={data.purpose['E-Statistic']}
-                                                disabled={!granted_purpose.includes('E-Statistic')}
                                                 handleChange={(e) =>
                                                     handleCheckboxChange('E-Statistic')
                                                 }
@@ -288,7 +155,6 @@ const CreateHealthRecord = () => {
                                             <Checkbox
                                                 name="e-MedicineDiscovery"
                                                 value={data.purpose['E-MedicineDiscovery']}
-                                                disabled={!granted_purpose.includes('E-MedicineDiscovery')}
                                                 handleChange={(e) =>
                                                     handleCheckboxChange('E-MedicineDiscovery')
                                                 }
@@ -304,7 +170,6 @@ const CreateHealthRecord = () => {
                                         <Checkbox
                                             name="medicaltreatment"
                                             value={data.purpose.MedicalTreatment}
-                                            disabled={!granted_purpose.includes('MedicalTreatment')}
                                             handleChange={(e) =>
                                                 handleCheckboxChange('MedicalTreatment')
                                             }
@@ -318,7 +183,6 @@ const CreateHealthRecord = () => {
                                             <Checkbox
                                                 name="m-cancer"
                                                 value={data.purpose['M-Cancer']}
-                                                disabled={!granted_purpose.includes('M-Cancer')}
                                                 handleChange={(e) =>
                                                     handleCheckboxChange('M-Cancer')
                                                 }
@@ -331,7 +195,6 @@ const CreateHealthRecord = () => {
                                             <Checkbox
                                                 name="m-diabetic"
                                                 value={data.purpose['M-Diabetic']}
-                                                disabled={!granted_purpose.includes('M-Diabetic')}
                                                 handleChange={(e) =>
                                                     handleCheckboxChange('M-Diabetic')
                                                 }
@@ -344,7 +207,6 @@ const CreateHealthRecord = () => {
                                             <Checkbox
                                                 name="m-education"
                                                 value={data.purpose['M-Education']}
-                                                disabled={!granted_purpose.includes('M-Education')}
                                                 handleChange={(e) =>
                                                     handleCheckboxChange('M-Education')
                                                 }
@@ -357,7 +219,6 @@ const CreateHealthRecord = () => {
                                             <Checkbox
                                                 name="m-mental"
                                                 value={data.purpose['M-Mental']}
-                                                disabled={!granted_purpose.includes('M-Mental')}
                                                 handleChange={(e) =>
                                                     handleCheckboxChange('M-Mental')
                                                 }
@@ -374,7 +235,6 @@ const CreateHealthRecord = () => {
                                         <Checkbox
                                             name="insurance"
                                             value={data.purpose.Insurance}
-                                            disabled={!granted_purpose.includes('Insurance')}
                                             handleChange={(e) =>
                                                 handleCheckboxChange('Insurance')
                                             }
@@ -388,7 +248,6 @@ const CreateHealthRecord = () => {
                                             <Checkbox
                                                 name="i-evaluatelnsurancestatus"
                                                 value={data.purpose['I-EvaluatelnsuranceStatus']}
-                                                disabled={!granted_purpose.includes('I-EvaluatelnsuranceStatus')}
                                                 handleChange={(e) =>
                                                     handleCheckboxChange('I-EvaluatelnsuranceStatus')
                                                 }
@@ -402,9 +261,71 @@ const CreateHealthRecord = () => {
                             </div>
                             <InputError message={errors.purpose} />
                         </div>
-                        
-                        { multipleFileUploads() }                         
+                        <div className="w-full pb-2 pr-6 text-lg font-semibold">Select Access Type for Roles</div>                    
+                        <div className="w-full pb-7 pr-6 lg:w-1/2">
+                            <InputLabel forInput="nurse_access_type" value="Nurse" />
+                            <SelectInput
+                                name="nurse_access_type"
+                                value={data.roles.Nurse}
+                                onChange={(e) =>
+                                    handleSelectChange('Nurse', e.target.value)
+                                }
+                            >
+                                <option value="None">None</option>
+                                <option value="Read">Read</option>
+                                <option value="Copy">Copy</option>
+                                <option value="Write">Write</option>
+                            </SelectInput>
+                        </div>
 
+                        <div className="w-full pb-7 pr-6 lg:w-1/2">
+                            <InputLabel forInput="doctor_access_type" value="Doctor" />
+                            <SelectInput
+                                name="doctor_access_type"
+                                value={data.roles.Doctor}
+                                onChange={(e) =>
+                                    handleSelectChange('Doctor', e.target.value)
+                                }
+                            >
+                                 <option value="None">None</option>
+                                <option value="Read">Read</option>
+                                <option value="Copy">Copy</option>
+                                <option value="Write">Write</option>
+                            </SelectInput>
+                        </div>
+
+                        <div className="w-full pb-7 pr-6 lg:w-1/2">
+                            <InputLabel forInput="sales_access_type" value="Sales Agent" />
+                            <SelectInput
+                                name="sales_access_type"
+                                value={data.roles["Sales Agent"]}
+                                onChange={(e) =>
+                                    handleSelectChange('Sales Agent', e.target.value)
+                                }
+                            >
+                                 <option value="None">None</option>
+                                <option value="Read">Read</option>
+                                <option value="Copy">Copy</option>
+                                <option value="Write">Write</option>
+                            </SelectInput>
+                        </div>
+
+                        <div className="w-full pb-7 pr-6 lg:w-1/2">
+                            <InputLabel forInput="medical_access_type" value="Medical Representative" />
+                            <SelectInput
+                                name="medical_access_type"
+                                value={data.roles["Medical Representative"]}
+                                onChange={(e) =>
+                                    handleSelectChange('Medical Representative', e.target.value)
+                                }
+                            >
+                                 <option value="None">None</option>
+                                <option value="Read">Read</option>
+                                <option value="Copy">Copy</option>
+                                <option value="Write">Write</option>
+                            </SelectInput>
+                        </div>
+                        
                     </div>
                     <div className="flex items-center justify-end px-8 py-4 bg-gray-100 border-t border-gray-200">
                         <LoadingButton
@@ -412,7 +333,7 @@ const CreateHealthRecord = () => {
                             type="submit"
                             className="btn-indigo"
                         >
-                            Create Health Record
+                            Consent Settings
                         </LoadingButton>
                     </div>
                 </form>
@@ -421,6 +342,6 @@ const CreateHealthRecord = () => {
     );
 };
 
-CreateHealthRecord.layout = (page) => <Layout title="Create Health Record" children={page} />;
+Edit.layout = (page) => <Layout title="Consent Settings" children={page} />;
 
-export default CreateHealthRecord;
+export default Edit;
