@@ -22,6 +22,14 @@ const ViewLogs = () => {
                 <p><span className="font-medium">Purpose: </span> { data.requested_purpose?.join() }</p>    
                 </>
             )
+        } else if( type == 'auto_consent_grant') {
+            return (
+                <>
+                <p><span className="font-medium">Access Type: </span> { data.consent.access_type }</p>    
+                <p><span className="font-medium">Role: </span> { data.consent.role }</p>    
+                <p><span className="font-medium">Purpose: </span> { data.consent.requested_purpose?.join() }</p>    
+                </>
+            )
         }
     }
 
