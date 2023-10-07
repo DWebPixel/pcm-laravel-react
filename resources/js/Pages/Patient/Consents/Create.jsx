@@ -1,4 +1,4 @@
-import { Link, useForm, Head } from "@inertiajs/react";
+import { Link, useForm, Head, usePage } from "@inertiajs/react";
 import Layout from "@/Shared/Layout";
 import LoadingButton from "@/Shared/LoadingButton";
 import TextInput from "@/Shared/TextInput";
@@ -9,6 +9,8 @@ import InputError from "@/Shared//InputError";
 import Checkbox from "@/Shared/Checkbox";
 
 const Create = () => {
+    const { roles } = usePage().props;
+    console.log(roles);
     const { data, setData, errors, post, processing, reset} = useForm({
         role: "",
         access_type: "",
@@ -118,10 +120,7 @@ const Create = () => {
                                 }
                             >
                                 <option value="">Select Role</option>
-                                <option value="Nurse">Nurse</option>
-                                <option value="Doctor">Doctor</option>
-                                <option value="Sales Agent">Sales Agent</option>
-                                <option value="Medical Representative">Medical Representative</option>
+                                { roles.map( role => <option value={role}>{role}</option>)}
                             </SelectInput>
                             <InputError message={errors.role} />
                         </div>
@@ -301,7 +300,7 @@ const Create = () => {
                             type="submit"
                             className="btn-indigo"
                         >
-                            Consent Settings
+                            Save Consent Settings
                         </LoadingButton>
                     </div>
                 </form>

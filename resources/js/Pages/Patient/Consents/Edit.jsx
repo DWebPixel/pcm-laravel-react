@@ -1,4 +1,4 @@
-import { Link, useForm, Head } from "@inertiajs/react";
+import { Link, useForm, Head, usePage } from "@inertiajs/react";
 import Layout from "@/Shared/Layout";
 import LoadingButton from "@/Shared/LoadingButton";
 import TextInput from "@/Shared/TextInput";
@@ -9,32 +9,29 @@ import InputError from "@/Shared//InputError";
 import Checkbox from "@/Shared/Checkbox";
 
 const Edit = () => {
+    const { consent } = usePage().props;
     const { data, setData, errors, post, processing, reset} = useForm({
-        roles: {
-            "Nurse": "None",
-            "Doctor": "None",
-            "Sales Agent": "None",
-            "Medical Representative": "None",
-        },
+        role: consent.role,
+        access_type: consent.access_type,
         purpose: {
-            "GeneralPurpose": false,
-            "Education": false,
-            "E-Statistic": false,
-            "E-MedicineDiscovery": false,
-            "MedicalTreatment": false,
-            "M-Cancer": false,
-            "M-Diabetic": false,
-            "M-Education": false,
-            "M-Mental": false,
-            "Insurance": false,
-            "I-EvaluatelnsuranceStatus": false
+            "GeneralPurpose": consent.purpose['GeneralPurpose'] ?? false,
+            "Education": consent.purpose['Education'] ?? false,
+            "E-Statistic": consent.purpose['E-Statistic'] ?? false,
+            "E-MedicineDiscovery": consent.purpose['E-MedicineDiscovery'] ?? false,
+            "MedicalTreatment": consent.purpose['MedicalTreatment'] ?? false,
+            "M-Cancer": consent.purpose['M-Cancer'] ?? false,
+            "M-Diabetic": consent.purpose['M-Diabetic'] ?? false,
+            "M-Education": consent.purpose['M-Education'] ?? false,
+            "M-Mental": consent.purpose['M-Mental'] ?? false,
+            "Insurance": consent.purpose['Insurance'] ?? false,
+            "I-EvaluatelnsuranceStatus": consent.purpose['I-EvaluatelnsuranceStatus'] ?? false,
             },  
         },
     );
 
     function handleSubmit(e) {
         e.preventDefault();
-        post(route("patient.store-consent-settings"), {
+        post(route("patient.consent-settings.update", consent.id), {
             onSuccess: () => {
                 reset();
             },
@@ -106,14 +103,51 @@ const Edit = () => {
             <Head title="Consent Settings" />
             <div>
                 <h1 className="mb-8 text-3xl font-bold">
-                    Automatic Consent Settings
+                    Edit Setting for role: { consent.role }
                 </h1>
             </div>
             <div className="max-w-3xl overflow-hidden bg-white rounded shadow">
                 <form name="EditForm" onSubmit={handleSubmit}>
                     <div className="flex flex-wrap p-8 -mb-8 -mr-6">
-                        <div className="w-full pb-2 pr-6 text-lg font-semibold">Select generic permissions</div>            
+                        {/* <div className="w-full pb-7 pr-6 lg:w-1/2">
+                            <InputLabel forInput="role" value="Select Role" />
+                            <SelectInput
+                                disabled
+                                name="role"
+                                value={data.role}
+                                onChange={(e) =>
+                                    setData('role', e.target.value)
+                                }
+                            >
+                                <option value="">Select Role</option>
+                                <option value="Nurse">Nurse</option>
+                                <option value="Doctor">Doctor</option>
+                                <option value="Sales Agent">Sales Agent</option>
+                                <option value="Medical Representative">Medical Representative</option>
+                            </SelectInput>
+                            <InputError message={errors.role} />
+                        </div> */}
+                        <div className="w-full pb-7 pr-6 lg:w-1/2">
+                            <InputLabel forInput="access_type" value="Select Access Type" />
+                            <SelectInput
+                                name="access_type"
+                                value={data.access_type}
+                                onChange={(e) =>
+                                    setData('access_type', e.target.value)
+                                }
+                            >
+                                <option value="">Select Access Type</option>
+                                <option value="Read">Read</option>
+                                <option value="Copy">Copy</option>
+                                <option value="Write">Write</option>
+                            </SelectInput>
+                            <InputError message={errors.access_type} />
+                        </div>
                         <div className="w-full pb-7 pr-6">
+                            <InputLabel
+                                forInput="purpose"
+                                value="Select Purpose Type"
+                            />
                             <Checkbox
                                 name="general_purpose"
                                 value={data.purpose.GeneralPurpose}
@@ -261,71 +295,7 @@ const Edit = () => {
                             </div>
                             <InputError message={errors.purpose} />
                         </div>
-                        <div className="w-full pb-2 pr-6 text-lg font-semibold">Select Access Type for Roles</div>                    
-                        <div className="w-full pb-7 pr-6 lg:w-1/2">
-                            <InputLabel forInput="nurse_access_type" value="Nurse" />
-                            <SelectInput
-                                name="nurse_access_type"
-                                value={data.roles.Nurse}
-                                onChange={(e) =>
-                                    handleSelectChange('Nurse', e.target.value)
-                                }
-                            >
-                                <option value="None">None</option>
-                                <option value="Read">Read</option>
-                                <option value="Copy">Copy</option>
-                                <option value="Write">Write</option>
-                            </SelectInput>
-                        </div>
-
-                        <div className="w-full pb-7 pr-6 lg:w-1/2">
-                            <InputLabel forInput="doctor_access_type" value="Doctor" />
-                            <SelectInput
-                                name="doctor_access_type"
-                                value={data.roles.Doctor}
-                                onChange={(e) =>
-                                    handleSelectChange('Doctor', e.target.value)
-                                }
-                            >
-                                 <option value="None">None</option>
-                                <option value="Read">Read</option>
-                                <option value="Copy">Copy</option>
-                                <option value="Write">Write</option>
-                            </SelectInput>
-                        </div>
-
-                        <div className="w-full pb-7 pr-6 lg:w-1/2">
-                            <InputLabel forInput="sales_access_type" value="Sales Agent" />
-                            <SelectInput
-                                name="sales_access_type"
-                                value={data.roles["Sales Agent"]}
-                                onChange={(e) =>
-                                    handleSelectChange('Sales Agent', e.target.value)
-                                }
-                            >
-                                 <option value="None">None</option>
-                                <option value="Read">Read</option>
-                                <option value="Copy">Copy</option>
-                                <option value="Write">Write</option>
-                            </SelectInput>
-                        </div>
-
-                        <div className="w-full pb-7 pr-6 lg:w-1/2">
-                            <InputLabel forInput="medical_access_type" value="Medical Representative" />
-                            <SelectInput
-                                name="medical_access_type"
-                                value={data.roles["Medical Representative"]}
-                                onChange={(e) =>
-                                    handleSelectChange('Medical Representative', e.target.value)
-                                }
-                            >
-                                 <option value="None">None</option>
-                                <option value="Read">Read</option>
-                                <option value="Copy">Copy</option>
-                                <option value="Write">Write</option>
-                            </SelectInput>
-                        </div>
-                        
+                    
                     </div>
                     <div className="flex items-center justify-end px-8 py-4 bg-gray-100 border-t border-gray-200">
                         <LoadingButton
@@ -333,7 +303,7 @@ const Edit = () => {
                             type="submit"
                             className="btn-indigo"
                         >
-                            Consent Settings
+                            Update Consent Settings
                         </LoadingButton>
                     </div>
                 </form>
@@ -342,6 +312,6 @@ const Edit = () => {
     );
 };
 
-Edit.layout = (page) => <Layout title="Consent Settings" children={page} />;
+Edit.layout = (page) => <Layout title="Edit Consent Settings" children={page} />;
 
 export default Edit;

@@ -76,6 +76,7 @@ Route::middleware('auth')->group(function () {
         Route::get('consent-settings/create', [ConsentSettingsController::class, 'create'])->name('consent-settings.create');
         Route::get('consent-settings/{setting}/edit', [ConsentSettingsController::class, 'edit'])->name('consent-settings.edit');
         Route::post('consent-settings/store', [ConsentSettingsController::class, 'store'])->name('consent-settings.store');
+        Route::post('consent-settings/{setting}/update', [ConsentSettingsController::class, 'update'])->name('consent-settings.update');
         Route::get('logs', [PatientController::class, 'viewLogs'])->name('view-logs');
     });
 });
