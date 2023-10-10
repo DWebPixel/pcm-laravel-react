@@ -32,7 +32,7 @@ Route::controller(AuthenticatedSessionController::class)->group(function () {
         Route::get('login', 'create')->name('login');
         Route::post('login', 'store')->name('login.store');
     });
-    Route::delete('logout', 'destroy')->name('logout');
+    Route::post('logout', 'destroy')->name('logout');
 });
 
 Route::middleware('auth')->group(function () {

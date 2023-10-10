@@ -1,0 +1,1490 @@
+{
+    "contractName": "Docmedsync",
+    "abi":[
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_admin",
+            "type": "address"
+          }
+        ],
+        "name": "addAdmin",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_orgId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "_name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_specialization",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "_walletAddress",
+            "type": "address"
+          }
+        ],
+        "name": "addDoctor",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_hospitalId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_patientId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "_condition",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_description",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_allergies",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_document",
+            "type": "string"
+          }
+        ],
+        "name": "addNewRecord",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "string",
+            "name": "_name",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "_walletAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "_license",
+            "type": "string"
+          },
+          {
+            "internalType": "enum Docmedsync.OrganizationType",
+            "name": "_organizationType",
+            "type": "uint8"
+          }
+        ],
+        "name": "addOrganization",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "string",
+            "name": "_title",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_DOB",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_postalAddress",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_email",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_mobileNumber",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_medicalCardNumber",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "_walletAddress",
+            "type": "address"
+          }
+        ],
+        "name": "addPatient",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "Admin_Address",
+            "type": "address"
+          }
+        ],
+        "name": "AdminAdded",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "Admin_Address",
+            "type": "address"
+          }
+        ],
+        "name": "AdminRemoved",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_consentIndex",
+            "type": "uint256"
+          }
+        ],
+        "name": "approveConsentByPatient",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "changeOwner",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "Patient",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "Requestor",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "enum Docmedsync.PurposeType",
+            "name": "purposeType",
+            "type": "uint8"
+          }
+        ],
+        "name": "ConsentApproved",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "Patient",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "Requestor",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "enum Docmedsync.PurposeType",
+            "name": "purposeType",
+            "type": "uint8"
+          }
+        ],
+        "name": "ConsentDenied",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "requester",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "patientId",
+            "type": "uint256"
+          },
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "organizationId",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "string",
+            "name": "role",
+            "type": "string"
+          },
+          {
+            "indexed": false,
+            "internalType": "enum Docmedsync.AccessType",
+            "name": "accessType",
+            "type": "uint8"
+          },
+          {
+            "indexed": false,
+            "internalType": "enum Docmedsync.PurposeType",
+            "name": "purposeType",
+            "type": "uint8"
+          },
+          {
+            "indexed": false,
+            "internalType": "enum Docmedsync.StatusType",
+            "name": "statusType",
+            "type": "uint8"
+          }
+        ],
+        "name": "ConsentRequested",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "Patient",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "Requestor",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "enum Docmedsync.PurposeType",
+            "name": "purposeType",
+            "type": "uint8"
+          }
+        ],
+        "name": "ConsentRevoked",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_consentIndex",
+            "type": "uint256"
+          }
+        ],
+        "name": "denyConsentByPatient",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "requester",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "patientId",
+            "type": "uint256"
+          },
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "organizationId",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "string",
+            "name": "role",
+            "type": "string"
+          },
+          {
+            "indexed": false,
+            "internalType": "enum Docmedsync.AccessType",
+            "name": "accessType",
+            "type": "uint8"
+          },
+          {
+            "indexed": false,
+            "internalType": "enum Docmedsync.PurposeType",
+            "name": "purposeType",
+            "type": "uint8"
+          },
+          {
+            "indexed": false,
+            "internalType": "enum Docmedsync.StatusType",
+            "name": "statusType",
+            "type": "uint8"
+          }
+        ],
+        "name": "InternalConsentApproved",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          }
+        ],
+        "name": "OwnerChanged",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_admin",
+            "type": "address"
+          }
+        ],
+        "name": "removeAdmin",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_patientId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_organizationId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum Docmedsync.PurposeType",
+            "name": "_purposeType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "enum Docmedsync.AccessType",
+            "name": "_accessType",
+            "type": "uint8"
+          }
+        ],
+        "name": "requestConsentByDoctor",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_consentIndex",
+            "type": "uint256"
+          }
+        ],
+        "name": "RevokeConsentByPatient",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "name": "addressToDoctorId",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "agentId",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "enum Docmedsync.PurposeType",
+            "name": "",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "consentRequestsByPurpose",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "Requestor",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "Organization",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "Role",
+            "type": "string"
+          },
+          {
+            "internalType": "enum Docmedsync.AccessType",
+            "name": "accessType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "enum Docmedsync.PurposeType",
+            "name": "purposeType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "enum Docmedsync.StatusType",
+            "name": "statusType",
+            "type": "uint8"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "doctorId",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_walletAddress",
+            "type": "address"
+          }
+        ],
+        "name": "getDoctorByAddress",
+        "outputs": [
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "specialization",
+                "type": "string"
+              },
+              {
+                "internalType": "address",
+                "name": "walletAddress",
+                "type": "address"
+              }
+            ],
+            "internalType": "struct Docmedsync.Doctor",
+            "name": "",
+            "type": "tuple"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_doctorId",
+            "type": "uint256"
+          }
+        ],
+        "name": "getDoctorById",
+        "outputs": [
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "specialization",
+                "type": "string"
+              },
+              {
+                "internalType": "address",
+                "name": "walletAddress",
+                "type": "address"
+              }
+            ],
+            "internalType": "struct Docmedsync.Doctor",
+            "name": "",
+            "type": "tuple"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_orgId",
+            "type": "uint256"
+          }
+        ],
+        "name": "getDoctorsForUser",
+        "outputs": [
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "specialization",
+                "type": "string"
+              },
+              {
+                "internalType": "address",
+                "name": "walletAddress",
+                "type": "address"
+              }
+            ],
+            "internalType": "struct Docmedsync.Doctor[]",
+            "name": "",
+            "type": "tuple[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_addr",
+            "type": "address"
+          }
+        ],
+        "name": "getOrganizationByAddress",
+        "outputs": [
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "internalType": "address",
+                "name": "walletAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "string",
+                "name": "License",
+                "type": "string"
+              },
+              {
+                "internalType": "enum Docmedsync.OrganizationType",
+                "name": "organizationType",
+                "type": "uint8"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "doctorIds",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "agentIds",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "scientistIds",
+                "type": "uint256[]"
+              }
+            ],
+            "internalType": "struct Docmedsync.Organization",
+            "name": "",
+            "type": "tuple"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_id",
+            "type": "uint256"
+          }
+        ],
+        "name": "getOrganizationById",
+        "outputs": [
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "internalType": "address",
+                "name": "walletAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "string",
+                "name": "License",
+                "type": "string"
+              },
+              {
+                "internalType": "enum Docmedsync.OrganizationType",
+                "name": "organizationType",
+                "type": "uint8"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "doctorIds",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "agentIds",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "scientistIds",
+                "type": "uint256[]"
+              }
+            ],
+            "internalType": "struct Docmedsync.Organization",
+            "name": "",
+            "type": "tuple"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_doctorAddress",
+            "type": "address"
+          }
+        ],
+        "name": "getOrganizationsForDoctor",
+        "outputs": [
+          {
+            "internalType": "uint256[]",
+            "name": "",
+            "type": "uint256[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "enum Docmedsync.OrganizationType",
+            "name": "_organizationType",
+            "type": "uint8"
+          }
+        ],
+        "name": "getOrganizationTypeString",
+        "outputs": [
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "getOwner",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_id",
+            "type": "uint256"
+          }
+        ],
+        "name": "getPatientById",
+        "outputs": [
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "string",
+                "name": "title",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "Name",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "DOB",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "postal_address",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "email",
+                "type": "string"
+              },
+              {
+                "internalType": "uint256",
+                "name": "mobileNumber",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "medical_card_number",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "medical_card_person_id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "records",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "address",
+                "name": "walletAddress",
+                "type": "address"
+              }
+            ],
+            "internalType": "struct Docmedsync.Patient",
+            "name": "",
+            "type": "tuple"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_patientAddress",
+            "type": "address"
+          }
+        ],
+        "name": "getPatientInfoByAddress",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_id",
+            "type": "uint256"
+          }
+        ],
+        "name": "getPatientRecords",
+        "outputs": [
+          {
+            "internalType": "uint256[]",
+            "name": "",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "string[]",
+            "name": "",
+            "type": "string[]"
+          },
+          {
+            "internalType": "string[]",
+            "name": "",
+            "type": "string[]"
+          },
+          {
+            "internalType": "string[]",
+            "name": "",
+            "type": "string[]"
+          },
+          {
+            "internalType": "string[]",
+            "name": "",
+            "type": "string[]"
+          },
+          {
+            "internalType": "bool[]",
+            "name": "",
+            "type": "bool[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_admin",
+            "type": "address"
+          }
+        ],
+        "name": "isAdmin",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "organizationId",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "patientConsentAllRequests",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "Requestor",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "Organization",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "Role",
+            "type": "string"
+          },
+          {
+            "internalType": "enum Docmedsync.AccessType",
+            "name": "accessType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "enum Docmedsync.PurposeType",
+            "name": "purposeType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "enum Docmedsync.StatusType",
+            "name": "statusType",
+            "type": "uint8"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          },
+          {
+            "internalType": "enum Docmedsync.PurposeType",
+            "name": "",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "patientConsentRequests",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "Requestor",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "Organization",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "Role",
+            "type": "string"
+          },
+          {
+            "internalType": "enum Docmedsync.AccessType",
+            "name": "accessType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "enum Docmedsync.PurposeType",
+            "name": "purposeType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "enum Docmedsync.StatusType",
+            "name": "statusType",
+            "type": "uint8"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "patientId",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "patients",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "Name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "DOB",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "postal_address",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "email",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "mobileNumber",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "medical_card_number",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "medical_card_person_id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "walletAddress",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "name": "patientToId",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "recordId",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "scientistId",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_patientId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "_doctorAddress",
+            "type": "address"
+          }
+        ],
+        "name": "viewAllConsentsByDoctor",
+        "outputs": [
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "string",
+                "name": "title",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "Name",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "DOB",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "postal_address",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "email",
+                "type": "string"
+              },
+              {
+                "internalType": "uint256",
+                "name": "mobileNumber",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "medical_card_number",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "medical_card_person_id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "records",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "address",
+                "name": "walletAddress",
+                "type": "address"
+              }
+            ],
+            "internalType": "struct Docmedsync.Patient",
+            "name": "",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "Requestor",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "Organization",
+                "type": "uint256"
+              },
+              {
+                "internalType": "string",
+                "name": "Role",
+                "type": "string"
+              },
+              {
+                "internalType": "enum Docmedsync.AccessType",
+                "name": "accessType",
+                "type": "uint8"
+              },
+              {
+                "internalType": "enum Docmedsync.PurposeType",
+                "name": "purposeType",
+                "type": "uint8"
+              },
+              {
+                "internalType": "enum Docmedsync.StatusType",
+                "name": "statusType",
+                "type": "uint8"
+              }
+            ],
+            "internalType": "struct Docmedsync.Consent[]",
+            "name": "",
+            "type": "tuple[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "viewConsentsByPatient",
+        "outputs": [
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "Requestor",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "Organization",
+                "type": "uint256"
+              },
+              {
+                "internalType": "string",
+                "name": "Role",
+                "type": "string"
+              },
+              {
+                "internalType": "enum Docmedsync.AccessType",
+                "name": "accessType",
+                "type": "uint8"
+              },
+              {
+                "internalType": "enum Docmedsync.PurposeType",
+                "name": "purposeType",
+                "type": "uint8"
+              },
+              {
+                "internalType": "enum Docmedsync.StatusType",
+                "name": "statusType",
+                "type": "uint8"
+              }
+            ],
+            "internalType": "struct Docmedsync.Consent[]",
+            "name": "",
+            "type": "tuple[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ],        
+    "networks": {
+      "5": {
+        "events": {},
+        "links": {},
+        "address": "0x58c335416f83cC84750803833fF2f4576Ff4a636"
+      }
+    }
+  }

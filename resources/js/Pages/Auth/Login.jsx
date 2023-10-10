@@ -5,11 +5,37 @@ import LoadingButton from "@/Shared/LoadingButton";
 import TextInput from "@/Shared/TextInput";
 import { Head, useForm } from "@inertiajs/react";
 import Logo from "@/Shared/Logo";
+import { getWeb3 } from "@/utils";
+import { useEffect, useState, cloneElement } from "react"
+import ABI from "@/Shared/abi.json";
 
 export default function Login() {
+
+    const [web3, setWeb3] = useState(undefined);
+    const [accounts, setAccounts] = useState(undefined);
+
+    const handleConnectToMetamask = async () => {
+        try {
+            const web3 = await getWeb3();
+            const networkId = await web3.eth.net.getId();
+            const deployedNetwork = ABI.networks[networkId];
+            if (deployedNetwork === undefined)
+                throw new Error('Make sure you are on the corrent network. Set the network to Goerli Test Network');
+            setWeb3(web3);
+            const accounts = await web3.eth.getAccounts();
+            setAccounts(accounts);
+            setData('address', accounts?.[0]);
+            console.log({accounts})
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
+
     const { data, setData, post, processing, errors } = useForm({
         email: "johndoe@example.com",
         password: "Password@2023",
+        address: "",
         remember: false,
     });
 
@@ -37,7 +63,6 @@ export default function Login() {
                     className="block text-white text-2xl font-bold text-center"
                     height={50}
                 />
-
                 <form
                     onSubmit={submit}
                     className="mt-8 overflow-hidden bg-white rounded-lg shadow-xl"
@@ -46,6 +71,23 @@ export default function Login() {
                         <h1 className="text-3xl font-bold text-center">
                             Welcome Back!
                         </h1>
+                        { accounts ? 
+                        <div className="text-center px-2">
+                            <p className="">Accounts:  { (accounts?.[0]) ? (accounts?.[0].slice(0, 10) + '...' + accounts?.[0].slice(-6) ) : "" }</p>
+                        </div>
+                        : 
+                        (
+                            <div className="flex justify-center py-2">
+                                <LoadingButton
+                                type="button"
+                            onClick={() => handleConnectToMetamask()}
+                        >
+                            Connect to Metamask
+                        </LoadingButton>
+                            </div>
+                        )
+                        }     
+                        <InputError message={errors.address} />
 
                         <div className="w-24 mx-auto mt-6 border-b-2" />
 
