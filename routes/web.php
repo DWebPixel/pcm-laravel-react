@@ -39,25 +39,27 @@ Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Users
-    Route::resource('users', UsersController::class)->except(['show']);
-    Route::put('users/{user}/restore', [UsersController::class, 'restore'])->name('users.restore');
-    Route::post('users/{user}/update-meta', [UsersController::class, 'updateMeta'])->name('users.update_meta');
+    Route::middleware('checkrole:Admin')->group(function() {
+        // Users
+        Route::resource('users', UsersController::class)->except(['show']);
+        Route::put('users/{user}/restore', [UsersController::class, 'restore'])->name('users.restore');
+        Route::post('users/{user}/update-meta', [UsersController::class, 'updateMeta'])->name('users.update_meta');
 
-    // Organizations
-    Route::resource('organizations', OrganizationsController::class)->except(['show']);
-    Route::put('organizations/{organization}/restore', [OrganizationsController::class, 'restore'])->name('organizations.restore');
-    Route::get('organizations/{organization}/create-user', [OrganizationsController::class, 'createUser'])->name('organizations.create_user');
-    Route::post('organizations/{organization}/store-user', [OrganizationsController::class, 'storeUser'])->name('organizations.store_user');
+        // Organizations
+        Route::resource('organizations', OrganizationsController::class)->except(['show']);
+        Route::put('organizations/{organization}/restore', [OrganizationsController::class, 'restore'])->name('organizations.restore');
+        Route::get('organizations/{organization}/create-user', [OrganizationsController::class, 'createUser'])->name('organizations.create_user');
+        Route::post('organizations/{organization}/store-user', [OrganizationsController::class, 'storeUser'])->name('organizations.store_user');
 
-    // Patients
-    Route::resource('patients', PatientsController::class)->except(['show']);
-    Route::put('patients/{patient}/restore', [PatientsController::class, 'restore'])->name('patients.restore');
+        // Patients
+        Route::resource('patients', PatientsController::class)->except(['show']);
+        Route::put('patients/{patient}/restore', [PatientsController::class, 'restore'])->name('patients.restore');
 
-    // Reports
-    Route::get('reports', [ReportsController::class, 'index'])->name('reports');
+        // Reports
+        Route::get('reports', [ReportsController::class, 'index'])->name('reports');
+    });
 
-    Route::prefix('user')->name('doctor.')->group(function() {
+    Route::prefix('user')->name('doctor.')->middleware('checkrole:NotPatient')->group(function() {
         Route::get('request-consent', [DoctorController::class, 'requestConsent'])->name('request-consent');
         Route::post('store-consent', [DoctorController::class, 'storeConsent'])->name('store-consent');
         Route::get('connected-patients', [DoctorController::class, 'connectedPatients'])->name('connected-patients');
@@ -67,7 +69,7 @@ Route::middleware('auth')->group(function () {
         Route::get('logs', [DoctorController::class, 'viewLogs'])->name('view-logs');
     });
 
-    Route::prefix('patient')->name('patient.')->group(function() {
+    Route::prefix('patient')->name('patient.')->middleware('checkrole:Patient')->group(function() {
         Route::get('consent-requests', [PatientController::class, 'consentRequests'])->name('index-consents');
         Route::post('consent-requests/{consent}/update-status/{status}', [PatientController::class, 'updateConsent'])->name('update-consent');
         Route::get('health-records', [PatientController::class, 'healthRecords'])->name('index-health-records');
