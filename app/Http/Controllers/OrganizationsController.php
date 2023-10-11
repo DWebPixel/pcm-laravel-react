@@ -17,7 +17,7 @@ class OrganizationsController extends Controller
     {
         return Inertia::render('Organizations/Index', [
             'filters' => Request::all('search', 'trashed'),
-            'organizations' => Organization::orderBy('name')
+            'organizations' => Organization::latest()
                 ->filter(Request::only('search', 'trashed'))
                 ->paginate(10)
                 ->withQueryString()
@@ -39,9 +39,9 @@ class OrganizationsController extends Controller
 
     public function store(OrganizationsRequest $request): RedirectResponse
     {
-        Organization::create(array_merge( $request->validated(), ['user_id' => auth()->id()]));
+        $organization = Organization::create(array_merge( $request->validated(), ['user_id' => auth()->id()]));
 
-        return Redirect::route('organizations.index')->with('success', 'Organization created.');
+        return Redirect::back()->with(['success' => 'Organization created.', 'data' => $organization]);
     }
 
     public function edit(Organization $organization)
@@ -74,7 +74,7 @@ class OrganizationsController extends Controller
     {
         $organization->update($request->validated());
 
-        return Redirect::back()->with('success', 'Organization updated.');
+        return Redirect::back()->with(['success' => 'Organization v.', 'data' => $organization->refresh()]);
     }
 
     public function destroy(Organization $organization): RedirectResponse
@@ -114,6 +114,7 @@ class OrganizationsController extends Controller
     public function storeUser(Organization $organization, Request $request){
         $user = User::find(Request::get('user_id'));
         $organization->users()->attach($user);
-        return Redirect::route('organizations.edit', $organization)->with('success', 'User added to organization!');
+        return Redirect::back()->with(['success' => 'User added to organization!', 'data' => [ 'user_id' => $user->id, 'org_id' => $organization->id]]);
+        //return Redirect::route('organizations.edit', $organization)->with('success', 'User added to organization!');
     }
 }

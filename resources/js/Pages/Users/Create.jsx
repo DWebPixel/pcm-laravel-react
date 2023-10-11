@@ -7,6 +7,9 @@ import FileInput from "@/Shared/FileInput";
 import InputLabel from "@/Shared/InputLabel";
 import InputError from "@/Shared//InputError";
 
+import { ethers } from "ethers";
+import { contractABI, contractAddress } from "@/constants";
+
 const Create = () => {
     const { data, setData, errors, post, processing } = useForm({
         first_name: "",
@@ -19,9 +22,53 @@ const Create = () => {
         role: "Patient",
     });
 
+    const createEthereumContract = async () => {
+        const provider = new ethers.BrowserProvider(ethereum);
+        const signer = await provider.getSigner();
+        const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
+      
+        return transactionsContract;
+    };
+
+    const submitDataToBlockchain = async (user) => {
+        try {
+            if (ethereum) {
+                const transactionsContract = await createEthereumContract();
+                const transactionHash = await transactionsContract.addUser(
+                    user.id,
+                    user.first_name,
+                    user.last_name,
+                    user.email,
+                    parseInt(user.contact),
+                    user.bc_address,
+                    user.address,
+                    user.role
+                );  
+                console.log(transactionHash.hash);
+            } else {
+            console.log("No ethereum object");
+            }
+        } catch (error) {
+            console.log(error);
+    
+            throw new Error("No ethereum object");
+        }
+    }  
+
     function handleSubmit(e) {
         e.preventDefault();
-        post(route("users.store"));
+        console.log("handle submit");
+        post(route("users.store"), {
+            preserveState: false,
+            onSuccess: async (data) => {
+                var user = data.props?.data;
+                console.log({user})
+                if( user ) {
+                    await submitDataToBlockchain(user)
+                    window.location.href = route('users.index')
+                }
+            },
+        });
     }
 
     return (

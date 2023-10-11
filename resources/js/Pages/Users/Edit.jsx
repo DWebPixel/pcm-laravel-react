@@ -13,6 +13,8 @@ import InputLabel from "@/Shared/InputLabel";
 import InputError from "@/Shared//InputError";
 import Modal from "@/Shared/Modal";
 import { Field } from "@/Components/Form/Field";
+import { ethers } from "ethers";
+import { contractABI, contractAddress } from "@/constants";
 
 const Edit = () => {
     const [showModal, setShowModal] = useState(false);
@@ -46,7 +48,7 @@ const Edit = () => {
         emergency_contact_phone: user.metas?.emergency_contact_phone || "",
         medicare_card_id: user.metas?.medicare_card_id || "",
         medicare_card_number: user.metas?.medicare_card_number || "",
-        private_health_care: user.metas?.private_health_care || ""
+        private_health_care: user.metas?.private_health_care || "Yes"
     }
 
     const doctorFields = {
@@ -64,18 +66,85 @@ const Edit = () => {
         processing: metaProcessing,
     } = useForm(metaFields);
 
-    console.log(user.deleted_at);
+    
+    const createEthereumContract = async () => {
+        const provider = new ethers.BrowserProvider(ethereum);
+        const signer = await provider.getSigner();
+        const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
+      
+        return transactionsContract;
+    };
+
+    const updateUserOnBlockchain = async (user) => {
+        try {
+            if (ethereum) {
+                const transactionsContract = await createEthereumContract();
+                const transactionHash = await transactionsContract.updateUser(
+                    user.id,
+                    user.first_name,
+                    user.last_name,
+                    user.email,
+                    parseInt(user.contact),
+                    user.bc_address,
+                    user.address,
+                    user.role
+                );  
+                console.log(transactionHash.hash);
+            } else {
+            console.log("No ethereum object");
+            }
+        } catch (error) {
+            console.log(error);
+    
+            throw new Error("No ethereum object");
+        }
+    }  
+
+    const updateUserMetaDataOnBlockchain = async (id, data) => {
+        try {
+            if (ethereum) {
+                const transactionsContract = await createEthereumContract();
+                const transactionHash = await transactionsContract.updateAdditionalDataUser(id, data);  
+                console.log(transactionHash.hash);
+            } else {
+            console.log("No ethereum object");
+            }
+        } catch (error) {
+            console.log(error);
+    
+            throw new Error("No ethereum object");
+        }
+    }  
 
     function handleSubmit(e) {
         e.preventDefault();
 
-        post(route("users.update", user.id));
+        post(route("users.update", user.id), {
+            preserveState: true,
+            onSuccess: async (data) => {
+                var user = data.props?.data;
+                console.log({user})
+                if( user ) {
+                   await updateUserOnBlockchain(user)
+                }
+            },
+        });
     }
 
     function handleAdditionalDetailsSubmit(e) {
         e.preventDefault();
         
-        metaPost(route("users.update_meta", user.id));
+        metaPost(route("users.update_meta", user.id), {
+            preserveState: true,
+            onSuccess: async (data) => {
+                var userData = data.props?.data;
+                console.log({userData})
+                console.log(JSON.stringify(userData).replace(/"/g, ''))
+                if( userData ) {
+                    await updateUserMetaDataOnBlockchain(user.id , JSON.stringify(userData).replace(/"/g, ''))
+                }
+            },
+        });
     }
 
     const deleteUser = (e) => {

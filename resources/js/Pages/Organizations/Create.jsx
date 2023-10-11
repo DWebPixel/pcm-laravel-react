@@ -7,6 +7,9 @@ import InputLabel from "@/Shared/InputLabel";
 import InputError from "@/Shared//InputError";
 import { useEffect, useState } from "react";
 
+import { ethers } from "ethers";
+import { contractABI, contractAddress } from "@/constants";
+
 const Create = () => {
     
     const { data, setData, errors, post, processing } = useForm({
@@ -16,9 +19,42 @@ const Create = () => {
         type: "hospital",
     });
 
+    const createEthereumContract = async () => {
+        const provider = new ethers.BrowserProvider(ethereum);
+        const signer = await provider.getSigner();
+        const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
+      
+        return transactionsContract;
+    };
+
+    const submitDataToBlockchain = async (organization) => {
+        try {
+            if (ethereum) {
+                const transactionsContract = await createEthereumContract();
+                const transactionHash = await transactionsContract.addOrganization(organization.id, organization.name, organization.type , parseInt(organization.phone), organization.address);
+                console.log(transactionHash);
+            } else {
+            console.log("No ethereum object");
+            }
+        } catch (error) {
+            console.log(error);
+    
+            throw new Error("No ethereum object");
+        }
+    }    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        post(route("organizations.store"));
+        post(route("organizations.store"), {
+            preserveState: false,
+            onSuccess: async (data) => {
+                var organization = data.props?.data;
+                console.log({organization})
+                if( organization ) {
+                    await submitDataToBlockchain(organization)
+                }
+            },
+        });
     }
 
     return (

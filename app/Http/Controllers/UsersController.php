@@ -18,7 +18,7 @@ class UsersController extends Controller
     {
         return Inertia::render('Users/Index', [
             'filters' => Request::all('search', 'role', 'trashed'),
-            'users' => User::orderByName()
+            'users' => User::latest()
                 ->filter(Request::only('search', 'role', 'trashed'))
                 ->get()
                 ->transform(fn ($user) => [
@@ -52,7 +52,7 @@ class UsersController extends Controller
             'bc_address.required' => 'Blockchain address is required'
         ]);
 
-        User::create([
+        $user = User::create([
             'first_name' => Request::get('first_name'),
             'last_name' => Request::get('last_name'),
             'email' => Request::get('email'),
@@ -64,7 +64,7 @@ class UsersController extends Controller
             // 'photo_path' => Request::file('photo') ? Request::file('photo')->store('users') : null,
         ]);
 
-        return Redirect::route('users.index')->with('success', 'User created.');
+        return Redirect::back()->with(['success' => 'User created.', 'data' => $user]);
     }
 
     public function edit(User $user)
@@ -124,7 +124,9 @@ class UsersController extends Controller
             $user->update(['password' => Request::get('password')]);
         }
 
-        return Redirect::back()->with('success', 'User updated.');
+        $user->refresh();
+
+        return Redirect::back()->with(['success' => 'User updated.', 'data' => $user]);
     }
 
     public function destroy(User $user): RedirectResponse
@@ -168,6 +170,6 @@ class UsersController extends Controller
             }
         }
 
-        return Redirect::back()->with('success', 'Update successful.');
+        return Redirect::back()->with(['success' => 'Update successful.', 'data' => $user->metas->pluck('value', 'meta_key') ]);
     }
 }

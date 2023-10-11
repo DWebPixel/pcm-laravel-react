@@ -11,6 +11,8 @@ import TrashedMessage from "@/Shared/TrashedMessage";
 import Icon from "@/Shared/Icon";
 import Modal from "@/Shared/Modal";
 import { Field } from "@/Components/Form/Field";
+import { ethers } from "ethers";
+import { contractABI, contractAddress } from "@/constants";
 
 const Edit = () => {
     const [showModal, setShowModal] = useState(false);
@@ -30,10 +32,43 @@ const Edit = () => {
         address: organization.address || "",
     });
 
+    const createEthereumContract = async () => {
+        const provider = new ethers.BrowserProvider(ethereum);
+        const signer = await provider.getSigner();
+        const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
+      
+        return transactionsContract;
+    };
+
+    const submitDataToBlockchain = async (organization) => {
+        try {
+            if (ethereum) {
+                const transactionsContract = await createEthereumContract();
+                const transactionHash = await transactionsContract.updateOrganization(organization.id, organization.name, organization.type , parseInt(organization.phone), organization.address);
+                console.log(transactionHash);
+            } else {
+            console.log("No ethereum object");
+            }
+        } catch (error) {
+            console.log(error);
+    
+            throw new Error("No ethereum object");
+        }
+    }    
+
     function handleSubmit(e) {
         e.preventDefault();
 
-        put(route("organizations.update", organization.id));
+        put(route("organizations.update", organization.id), {
+            preserveState: true,
+            onSuccess: async (data) => {
+                var organization = data.props?.data;
+                console.log({organization})
+                if( organization ) {
+                    await submitDataToBlockchain(organization)
+                }
+            },
+        });
     }
 
     const deleteOrganization = (e) => {
