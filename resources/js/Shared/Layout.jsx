@@ -2,47 +2,44 @@ import MainMenu from "@/Shared/MainMenu";
 import TopHeader from "@/Shared/TopHeader";
 import BottomHeader from "@/Shared/BottomHeader";
 import FlashMessages from "@/Shared/FlashMessages";
-import { getWeb3 } from "@/utils";
 import { useEffect, useState } from "react";
 import { useForm } from "@inertiajs/react";
 
 export default function Layout({ children }) {
-    const [web3, setWeb3] = useState(undefined);
-    const [accounts, setAccounts] = useState(undefined);
+    const [currentAccount, setCurrentAccount] = useState(undefined);
     const { post } = useForm({
     });
 
-    const isReady = () => {
-        return (
-            typeof web3 !== 'undefined'
-            && typeof accounts !== 'undefined'
-        );
-    }
+    useEffect(() => {
+        const checkIfWalletIsConnect = async () => {
+            try {
+              if (!ethereum) return alert("Please install MetaMask.");
+        
+              const accounts = await ethereum.request({ method: "eth_accounts" });
+        
+              if (accounts.length) {
+                setCurrentAccount(accounts[0]);
+        
+              } else {
+                console.log("No accounts found");
+              }
+            } catch (error) {
+              console.log(error);
+            }
+          };
+        checkIfWalletIsConnect();  
+    }, [])
 
-    if (isReady()) {
+    if (window.ethereum && currentAccount) {
         window.ethereum.on('accountsChanged', accounts => {
             //account changed. Logout user
             post( route('logout'));
         });
     }
 
-    useEffect(() => {
-        const init = async () => {
-            try {
-                const web3 = await getWeb3();
-                const accounts = await web3.eth.getAccounts();
-                setWeb3(web3);
-                setAccounts(accounts);
-            } catch (error) {
-                console.log(error);
-                
-            }
-        }
-        init();
-    }, [])
     return (
         <>
-            <p className="bg-green-400 text-center">Connected address: { accounts?.[0]}</p>
+            <p className="bg-green-400 text-center">Connected address: { currentAccount }</p>
             <FlashMessages />
             <div className="flex flex-col">
                 <div className="flex flex-col h-screen">

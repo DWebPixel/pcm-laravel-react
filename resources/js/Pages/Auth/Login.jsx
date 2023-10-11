@@ -5,32 +5,55 @@ import LoadingButton from "@/Shared/LoadingButton";
 import TextInput from "@/Shared/TextInput";
 import { Head, useForm } from "@inertiajs/react";
 import Logo from "@/Shared/Logo";
-import { getWeb3 } from "@/utils";
-import { useEffect, useState, cloneElement } from "react"
-import ABI from "@/Shared/abi.json";
+import { ethers } from "ethers";
+import { contractABI, contractAddress } from "@/constants";
+import { useState } from "react";
 
 export default function Login() {
-
-    const [web3, setWeb3] = useState(undefined);
-    const [accounts, setAccounts] = useState(undefined);
-
-    const handleConnectToMetamask = async () => {
+    const { ethereum } = window;
+    const [currentAccount, setCurrentAccount] = useState(undefined);
+    
+    const connectWallet = async () => {
         try {
-            const web3 = await getWeb3();
-            const networkId = await web3.eth.net.getId();
-            const deployedNetwork = ABI.networks[networkId];
-            if (deployedNetwork === undefined)
-                throw new Error('Make sure you are on the corrent network. Set the network to Goerli Test Network');
-            setWeb3(web3);
-            const accounts = await web3.eth.getAccounts();
-            setAccounts(accounts);
-            setData('address', accounts?.[0]);
-            console.log({accounts})
+        if (!ethereum) return alert("Please install MetaMask.");
+
+        const accounts = await ethereum.request({ method: "eth_requestAccounts", });
+
+        setCurrentAccount(accounts[0]);
+        setData('address', accounts[0])
+        //window.location.reload();
+        } catch (error) {
+        console.log(error);
+
+        throw new Error("No ethereum object");
+        }
+    };
+
+    const createEthereumContract = async () => {
+        const provider = new ethers.BrowserProvider(ethereum);
+        const signer = await provider.getSigner();
+        const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
+      
+        return transactionsContract;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            if (ethereum) {
+                const transactionsContract = await createEthereumContract();
+                const transactionHash = await transactionsContract.addOrganization(3,"Hosptial2","hospital2",89273627282,"addressdsd2");
+                console.log(transactionHash);
+            } else {
+            console.log("No ethereum object");
+            }
         } catch (error) {
             console.log(error);
-            
+    
+            throw new Error("No ethereum object");
         }
-    }
+    }    
 
     const { data, setData, post, processing, errors } = useForm({
         email: "johndoe@example.com",
@@ -56,8 +79,8 @@ export default function Login() {
 
     return (
         <div className="flex items-center justify-center min-h-screen p-6 bg-indigo-800">
-            <Head title="Login" />
-
+            <Head title="Login"/>
+            <button type="button" onClick={handleSubmit}>Send record</button>
             <div className="w-full max-w-md">
                 <Logo
                     className="block text-white text-2xl font-bold text-center"
@@ -71,16 +94,16 @@ export default function Login() {
                         <h1 className="text-3xl font-bold text-center">
                             Welcome Back!
                         </h1>
-                        { accounts ? 
+                        { currentAccount ? 
                         <div className="text-center px-2">
-                            <p className="">Accounts:  { (accounts?.[0]) ? (accounts?.[0].slice(0, 10) + '...' + accounts?.[0].slice(-6) ) : "" }</p>
+                            <p className="">Accounts:  { (currentAccount) ? (currentAccount.slice(0, 10) + '...' + currentAccount.slice(-6) ) : "" }</p>
                         </div>
                         : 
                         (
                             <div className="flex justify-center py-2">
                                 <LoadingButton
                                 type="button"
-                            onClick={() => handleConnectToMetamask()}
+                            onClick={() => connectWallet()}
                         >
                             Connect to Metamask
                         </LoadingButton>

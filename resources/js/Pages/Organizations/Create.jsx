@@ -5,8 +5,10 @@ import TextInput from "@/Shared/TextInput";
 import SelectInput from "@/Shared/SelectInput";
 import InputLabel from "@/Shared/InputLabel";
 import InputError from "@/Shared//InputError";
+import { useEffect, useState } from "react";
 
 const Create = () => {
+    
     const { data, setData, errors, post, processing } = useForm({
         name: "",
         phone: "",
@@ -14,7 +16,7 @@ const Create = () => {
         type: "hospital",
     });
 
-    function handleSubmit(e) {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         post(route("organizations.store"));
     }
@@ -30,6 +32,8 @@ const Create = () => {
                     Organizations
                 </Link>
                 <span className="font-medium text-indigo-600"> /</span> Create
+
+                <button type="button" onClick={handleSubmit}>Submit</button>
             </h1>
             <div className="max-w-3xl overflow-hidden bg-white rounded shadow">
                 <form onSubmit={handleSubmit}>
