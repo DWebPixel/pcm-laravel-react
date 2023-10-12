@@ -74,7 +74,7 @@ class OrganizationsController extends Controller
     {
         $organization->update($request->validated());
 
-        return Redirect::back()->with(['success' => 'Organization v.', 'data' => $organization->refresh()]);
+        return Redirect::back()->with(['success' => 'Organization updated!', 'data' => $organization->refresh()]);
     }
 
     public function destroy(Organization $organization): RedirectResponse

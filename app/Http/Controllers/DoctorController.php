@@ -43,14 +43,13 @@ class DoctorController extends Controller
             'organization_id' =>  $org_id,
             'role' => $requestor->role,
             'access_type' => $request->access_type,
-            'purpose' => json_encode($request->purpose),
-            'expiry_date' => Carbon::now()->addMonth()
+            'purpose' => json_encode($request->purpose)
         ]);
        
         $message = "$requestor->name requested consent from $patient->name";
         addLog($patient->id, $requestor->id, $org_id, 'request_consent', $message, json_encode($consent));
        
-        return Redirect::back()->with('success', 'Consent request sent.');
+        return Redirect::back()->with(['success' => 'Consent request sent!', 'data' => $consent->refresh()]);
     }
 
     public function connectedPatients()

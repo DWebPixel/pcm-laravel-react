@@ -8,7 +8,11 @@ import InputLabel from "@/Shared/InputLabel";
 import InputError from "@/Shared//InputError";
 import Checkbox from "@/Shared/Checkbox";
 
+import { ethers } from "ethers";
+import { contractABI, contractAddress } from "@/constants";
+
 const RequestConsent = () => {
+    
     const { data, setData, errors, post, processing, reset} = useForm({
         patient_address: "",
         access_type: "Read",
@@ -63,12 +67,91 @@ const RequestConsent = () => {
         // }
     );
 
+    const createEthereumContract = async () => {
+        const provider = new ethers.BrowserProvider(ethereum);
+        const signer = await provider.getSigner();
+        const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
+      
+        return transactionsContract;
+    };
+
+    const getAccessTypeForBlockchain = (access_type) => {
+        const reversedArray = {
+            "Read" : 0,
+            "Copy" : 1,
+            "Write": 2
+        };
+        return reversedArray[access_type];
+    }
+
+    const getPuporseTypesForBlockchain = (purposes) => {
+        const reversedArray = {
+            "GeneralPurpose": 0,
+            "Education": 1,
+            "E-Statistic": 2,
+            "E-MedicineDiscovery": 3,
+            "MedicalTreatment": 4,
+            "M-Cancer": 5,
+            "M-Diabetic": 6,
+            "M-Education": 7,
+            "M-Mental": 8,
+            "Insurance": 9,
+            "I-EvaluatelnsuranceStatus": 10
+        };
+
+        var purposeTypes = [];
+
+        for (const [key, value] of Object.entries(purposes)) {
+            if( value ) {
+                purposeTypes.push( reversedArray[key] )
+            }
+          }
+
+
+        return purposeTypes;
+    }
+
+
+    const submitDataToBlockchain = async (consent) => {
+        try {
+            if (ethereum) {
+                const transactionsContract = await createEthereumContract();
+
+                var accessType = getAccessTypeForBlockchain(consent.access_type);
+                var purposeTypes = getPuporseTypesForBlockchain(JSON.parse(consent.purpose));
+                console.log({accessType})
+                console.log({purposeTypes})
+                const transactionHash = await transactionsContract.requestConsent(
+                    consent.id,
+                    consent.requestor_id,
+                    consent.requestee_id,
+                    consent.organization_id,
+                    consent.role,
+                    purposeTypes,
+                    accessType
+                );
+                console.log(transactionHash);
+            } else {
+            console.log("No ethereum object");
+            }
+        } catch (error) {
+            console.log(error);
+    
+            throw new Error("No ethereum object");
+        }
+    }    
+
     function handleSubmit(e) {
         e.preventDefault();
         console.log(data);
         post(route("doctor.store-consent"), {
-            onSuccess: () => {
-                reset();
+            preserveState: false,
+            onSuccess: async (data) => {
+                var consent = data.props?.data;
+                console.log({consent})
+                if( consent ) {
+                    await submitDataToBlockchain(consent)
+                }
             },
         });
     }

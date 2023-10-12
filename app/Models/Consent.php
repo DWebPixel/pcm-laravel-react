@@ -33,7 +33,7 @@ class Consent extends Model
             //Find consent settings for this patient
             $consentSettings = $consent->patient->consentSettings()->whereRole($consent->role)->first();
 
-            if($consentSettings->access_type == $consent->access_type){
+            if($consentSettings && $consentSettings->access_type == $consent->access_type){
                 $cs_purpose = $consentSettings->purposeFiltered;
                 $c_purpose = $consent->requested_purpose;
 

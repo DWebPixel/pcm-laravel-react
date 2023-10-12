@@ -1,56 +1,14 @@
 {
     "contractName": "Docmedsync",
+    "contractAddress": "0xd886C2853e5b2e0BEF0B88f39B0BFf394356f805",      
+    "networks": {
+      "11155111": {
+        "events": {},
+        "links": {},
+        "address": "0xd886C2853e5b2e0BEF0B88f39B0BFf394356f805"
+      }
+    },
     "contractABI": [
-      {
-        "inputs": [],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "Admin_Address",
-            "type": "address"
-          }
-        ],
-        "name": "AdminAdded",
-        "type": "event"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "Admin_Address",
-            "type": "address"
-          }
-        ],
-        "name": "AdminRemoved",
-        "type": "event"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          }
-        ],
-        "name": "OwnerChanged",
-        "type": "event"
-      },
       {
         "inputs": [
           {
@@ -88,9 +46,9 @@
             "type": "string"
           },
           {
-            "internalType": "uint256",
+            "internalType": "string",
             "name": "_phone_no",
-            "type": "uint256"
+            "type": "string"
           },
           {
             "internalType": "string",
@@ -126,9 +84,9 @@
             "type": "string"
           },
           {
-            "internalType": "uint256",
+            "internalType": "string",
             "name": "_mobile_Number",
-            "type": "uint256"
+            "type": "string"
           },
           {
             "internalType": "address",
@@ -189,6 +147,295 @@
         "type": "function"
       },
       {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "consentId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_denied_on",
+            "type": "uint256"
+          }
+        ],
+        "name": "denyConsent",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "Admin_Address",
+            "type": "address"
+          }
+        ],
+        "name": "AdminAdded",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "Admin_Address",
+            "type": "address"
+          }
+        ],
+        "name": "AdminRemoved",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "consentId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "expiryDate",
+            "type": "uint256"
+          }
+        ],
+        "name": "grantConsent",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          }
+        ],
+        "name": "OwnerChanged",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_admin",
+            "type": "address"
+          }
+        ],
+        "name": "removeAdmin",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_requestorId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_patientId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_organizationId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "_role",
+            "type": "string"
+          },
+          {
+            "internalType": "enum ConsentManagement.PurposeType[]",
+            "name": "_purposeTypes",
+            "type": "uint8[]"
+          },
+          {
+            "internalType": "enum ConsentManagement.AccessType",
+            "name": "_accessType",
+            "type": "uint8"
+          }
+        ],
+        "name": "requestConsent",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "consentId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_revoked_on",
+            "type": "uint256"
+          }
+        ],
+        "name": "revokeConsent",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "_data",
+            "type": "string"
+          }
+        ],
+        "name": "updateAdditionalDataUser",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "_name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_type",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_phone_no",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_postal_address",
+            "type": "string"
+          }
+        ],
+        "name": "updateOrganization",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "_first_Name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_last_Name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_email",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_mobile_Number",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "_wallet_Address",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "_postal_address",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_role",
+            "type": "string"
+          }
+        ],
+        "name": "updateUser",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_patientId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_consentId",
+            "type": "uint256"
+          }
+        ],
+        "name": "consentExists",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
         "inputs": [],
         "name": "getAllOrganizations",
         "outputs": [
@@ -210,9 +457,9 @@
                 "type": "string"
               },
               {
-                "internalType": "uint256",
+                "internalType": "string",
                 "name": "Phone_No",
-                "type": "uint256"
+                "type": "string"
               },
               {
                 "internalType": "string",
@@ -221,6 +468,172 @@
               }
             ],
             "internalType": "struct ConsentManagement.Organization[]",
+            "name": "",
+            "type": "tuple[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_patientId",
+            "type": "uint256"
+          }
+        ],
+        "name": "getConsentsForUser",
+        "outputs": [
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "Id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "Requestor_Id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "Requestor",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "Patient_Id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "Organization_Id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "string",
+                "name": "Role",
+                "type": "string"
+              },
+              {
+                "internalType": "enum ConsentManagement.AccessType",
+                "name": "accessType",
+                "type": "uint8"
+              },
+              {
+                "internalType": "enum ConsentManagement.PurposeType[]",
+                "name": "purposeTypes",
+                "type": "uint8[]"
+              },
+              {
+                "internalType": "enum ConsentManagement.StatusType",
+                "name": "statusType",
+                "type": "uint8"
+              },
+              {
+                "internalType": "uint256",
+                "name": "Granted_on",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "Denied_on",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "Revoked_on",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "Expiry_Date",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct ConsentManagement.Consent[]",
+            "name": "",
+            "type": "tuple[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "getConsentsUser",
+        "outputs": [
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "Id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "Requestor_Id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "Requestor",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "Patient_Id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "Organization_Id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "string",
+                "name": "Role",
+                "type": "string"
+              },
+              {
+                "internalType": "enum ConsentManagement.AccessType",
+                "name": "accessType",
+                "type": "uint8"
+              },
+              {
+                "internalType": "enum ConsentManagement.PurposeType[]",
+                "name": "purposeTypes",
+                "type": "uint8[]"
+              },
+              {
+                "internalType": "enum ConsentManagement.StatusType",
+                "name": "statusType",
+                "type": "uint8"
+              },
+              {
+                "internalType": "uint256",
+                "name": "Granted_on",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "Denied_on",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "Revoked_on",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "Expiry_Date",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct ConsentManagement.Consent[]",
             "name": "",
             "type": "tuple[]"
           }
@@ -306,9 +719,9 @@
                 "type": "string"
               },
               {
-                "internalType": "uint256",
+                "internalType": "string",
                 "name": "Mobile_Number",
-                "type": "uint256"
+                "type": "string"
               },
               {
                 "internalType": "address",
@@ -361,12 +774,12 @@
       {
         "inputs": [
           {
-            "internalType": "address",
-            "name": "_admin",
-            "type": "address"
+            "internalType": "enum ConsentManagement.PurposeType[]",
+            "name": "_purposeTypes",
+            "type": "uint8[]"
           }
         ],
-        "name": "removeAdmin",
+        "name": "isPurposeTypeApproved",
         "outputs": [
           {
             "internalType": "bool",
@@ -374,115 +787,27 @@
             "type": "bool"
           }
         ],
-        "stateMutability": "nonpayable",
+        "stateMutability": "view",
         "type": "function"
       },
       {
         "inputs": [
           {
             "internalType": "uint256",
-            "name": "_id",
+            "name": "",
             "type": "uint256"
-          },
-          {
-            "internalType": "string",
-            "name": "_data",
-            "type": "string"
           }
         ],
-        "name": "updateAdditionalDataUser",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
+        "name": "patientConsentCounts",
+        "outputs": [
           {
             "internalType": "uint256",
-            "name": "_id",
+            "name": "",
             "type": "uint256"
-          },
-          {
-            "internalType": "string",
-            "name": "_name",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "_type",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_phone_no",
-            "type": "uint256"
-          },
-          {
-            "internalType": "string",
-            "name": "_postal_address",
-            "type": "string"
           }
         ],
-        "name": "updateOrganization",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "uint256",
-            "name": "_id",
-            "type": "uint256"
-          },
-          {
-            "internalType": "string",
-            "name": "_first_Name",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "_last_Name",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "_email",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_mobile_Number",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "_wallet_Address",
-            "type": "address"
-          },
-          {
-            "internalType": "string",
-            "name": "_postal_address",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "_role",
-            "type": "string"
-          }
-        ],
-        "name": "updateUser",
-        "outputs": [],
-        "stateMutability": "nonpayable",
+        "stateMutability": "view",
         "type": "function"
       }
-    ],  
-    "contractAddress": "0x7adBdaC9827398d4BA7DAC397b2B5BAf69d10f2C",      
-    "networks": {
-      "11155111": {
-        "events": {},
-        "links": {},
-        "address": "0x7adBdaC9827398d4BA7DAC397b2B5BAf69d10f2C"
-      }
-    }
+    ]
   }

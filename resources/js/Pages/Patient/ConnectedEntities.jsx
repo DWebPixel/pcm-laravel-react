@@ -7,6 +7,9 @@ import AnchorLink from "@/Shared/AnchorLink";
 import LoadingButton from "@/Shared/LoadingButton";
 import DangerButton from "@/Shared/DangerButton";
 
+import { ethers } from "ethers";
+import { contractABI, contractAddress } from "@/constants";
+
 const ConnectedEntities = () => {
     const { connectedEntities } = usePage().props;
     const { data, links } = connectedEntities;
@@ -15,8 +18,48 @@ const ConnectedEntities = () => {
        
     });
 
+    const createEthereumContract = async () => {
+        const provider = new ethers.BrowserProvider(ethereum);
+        const signer = await provider.getSigner();
+        const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
+      
+        return transactionsContract;
+    };
+
+    const revokeConsentOnBlockchain = async (consent) => {
+        try {
+            if (ethereum) {
+                const transactionsContract = await createEthereumContract();
+
+                var epoch = Date.parse(consent.revoked_on)/1000;
+                const transactionHash = await transactionsContract.revokeConsent(
+                    consent.id,
+                    epoch
+                );
+
+                console.log(transactionHash);
+            } else {
+            console.log("No ethereum object");
+            }
+        } catch (error) {
+            console.log(error);
+    
+            throw new Error("No ethereum object");
+        }
+    }
+
     const revokeAccess = (id) => {
-        post(route('patient.update-consent', [id, 'revoked']));
+        post(route('patient.update-consent', [id, 'revoked']), {
+            preserveState: false,
+            onSuccess: async (data) => {
+                console.log({data})
+                var consent = data.props?.data;
+                console.log({consent})
+                if( consent ) {
+                    await revokeConsentOnBlockchain(consent)
+                }
+            },
+        });
     }
 
 

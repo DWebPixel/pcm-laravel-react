@@ -39,7 +39,7 @@ const Create = () => {
                     user.first_name,
                     user.last_name,
                     user.email,
-                    parseInt(user.contact),
+                    user.contact,
                     user.bc_address,
                     user.address,
                     user.role

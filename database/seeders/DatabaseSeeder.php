@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
        User::factory()->create([
             'first_name' => 'Durgesh',
             'last_name' => 'Tayade',
-            'bc_address' => 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kftjhx0wlh',
+            'bc_address' => '0x5805Ce93C1dbf957C74f25B20aDc04a5C2f8fe6a',
             'email' => 'durgesh@dwebpixel.com',
             'password' => Hash::make('Password@2023'),
             'role' => 'Admin'

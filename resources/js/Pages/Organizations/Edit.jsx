@@ -44,7 +44,7 @@ const Edit = () => {
         try {
             if (ethereum) {
                 const transactionsContract = await createEthereumContract();
-                const transactionHash = await transactionsContract.updateOrganization(organization.id, organization.name, organization.type , parseInt(organization.phone), organization.address);
+                const transactionHash = await transactionsContract.updateOrganization(organization.id, organization.name, organization.type , organization.phone, organization.address);
                 console.log(transactionHash);
             } else {
             console.log("No ethereum object");

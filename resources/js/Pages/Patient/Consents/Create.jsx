@@ -120,7 +120,7 @@ const Create = () => {
                                 }
                             >
                                 <option value="">Select Role</option>
-                                { roles.map( role => <option value={role}>{role}</option>)}
+                                { roles.map( (role,index) => <option key={index} value={role}>{role}</option>)}
                             </SelectInput>
                             <InputError message={errors.role} />
                         </div>

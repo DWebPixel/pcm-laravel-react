@@ -7,6 +7,9 @@ import AnchorLink from "@/Shared/AnchorLink";
 import LoadingButton from "@/Shared/LoadingButton";
 import DangerButton from "@/Shared/DangerButton";
 
+import { ethers } from "ethers";
+import { contractABI, contractAddress } from "@/constants";
+
 const ConsentRequests = () => {
     const { requests } = usePage().props;
     const { data, links } = requests;
@@ -15,12 +18,83 @@ const ConsentRequests = () => {
        
     });
 
+    const createEthereumContract = async () => {
+        const provider = new ethers.BrowserProvider(ethereum);
+        const signer = await provider.getSigner();
+        const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
+      
+        return transactionsContract;
+    };
+
+    const grantConsentOnBlockchain = async (consent) => {
+        try {
+            if (ethereum) {
+                const transactionsContract = await createEthereumContract();
+
+                var epoch = Date.parse(consent.expiry_date)/1000;
+                const transactionHash = await transactionsContract.grantConsent(
+                    consent.id,
+                    epoch
+                );
+
+                console.log(transactionHash);
+            } else {
+            console.log("No ethereum object");
+            }
+        } catch (error) {
+            console.log(error);
+    
+            throw new Error("No ethereum object");
+        }
+    }
+    
+    const denyConsentOnBlockchain = async (consent) => {
+        try {
+            if (ethereum) {
+                const transactionsContract = await createEthereumContract();
+
+                var epoch = Date.parse(consent.denied_on)/1000;
+                const transactionHash = await transactionsContract.denyConsent(
+                    consent.id,
+                    epoch
+                );
+
+                console.log(transactionHash);
+            } else {
+            console.log("No ethereum object");
+            }
+        } catch (error) {
+            console.log(error);
+    
+            throw new Error("No ethereum object");
+        }
+    } 
+
     const grantPermission = (id) => {
-        post(route('patient.update-consent', [id, 'granted']));
+        post(route('patient.update-consent', [id, 'granted']), {
+            preserveState: false,
+            onSuccess: async (data) => {
+                var consent = data.props?.data;
+                console.log({consent})
+                console.log(consent.expiry_date)
+                if( consent ) {
+                    await grantConsentOnBlockchain(consent)
+                }
+            },
+        });
     }
 
     const denyPermission = (id) => {
-        post(route('patient.update-consent', [id, 'denied']))
+        post(route('patient.update-consent', [id, 'denied']),{
+            preserveState: false,
+            onSuccess: async (data) => {
+                var consent = data.props?.data;
+                console.log({consent})
+                if( consent ) {
+                    await denyConsentOnBlockchain(consent)
+                }
+            },
+        })
     }
 
     return (

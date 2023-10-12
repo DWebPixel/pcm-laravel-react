@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Consent;
 use App\Models\ConsentSetting;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Request as FacadesRequest;
@@ -38,6 +39,8 @@ class PatientController extends Controller
             $update_array['granted_on'] = now();
             $update_array['granted_purpose'] = $consent->purpose;
             $update_array['granted_access_type'] = $consent->access_type;
+            //$update_array['expiry_date'] = Carbon::now()->addMonth();
+            $update_array['expiry_date'] = Carbon::now()->addMinutes(20);
         } else if( $status == 'denied') {
             $update_array['denied_on'] = now();
         } else if( $status == 'revoked') {
@@ -52,9 +55,9 @@ class PatientController extends Controller
         addLog($patient->id, $requestor->id, $consent->organization_id, 'change_consent_status', $message, json_encode($consent));
 
         if($status == 'revoked') {
-            return to_route('patient.connected-entities')->with('success', 'Access revoked!');
+            return to_route('patient.connected-entities')->with(['success' => 'Access Revoked!', 'data' => $consent->refresh()]);
         }
-        return to_route('patient.index-consents')->with('success', 'Status updated.');
+        return to_route('patient.index-consents')->with(['success' => 'Status updated!', 'data' => $consent->refresh()]);
     }
 
     public function healthRecords()
