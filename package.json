@@ -24,6 +24,7 @@
         "@inertiajs/react": "^1.0.0",
         "clsx": "^1.2.1",
         "ethers": "^6.8.0",
+        "jspdf": "^2.5.1",
         "react-hot-toast": "^2.4.0",
         "react-use": "^17.4.0",
         "vite-plugin-node-polyfills": "^0.15.0",

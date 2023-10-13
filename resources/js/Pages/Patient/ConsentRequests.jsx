@@ -6,16 +6,26 @@ import SearchFilter from "@/Shared/SearchFilter";
 import AnchorLink from "@/Shared/AnchorLink";
 import LoadingButton from "@/Shared/LoadingButton";
 import DangerButton from "@/Shared/DangerButton";
+import Modal from "@/Shared/Modal";
+import SecondaryButton from "@/Components/SecondaryButton";
+import InputLabel from "@/Shared/InputLabel";
+import TextInput from "@/Shared/TextInput";
+import Checkbox from "@/Shared/Checkbox";
 
 import { ethers } from "ethers";
 import { contractABI, contractAddress } from "@/constants";
+import { useState } from "react";
 
 const ConsentRequests = () => {
     const { requests } = usePage().props;
-    const { data, links } = requests;
+    const { data: requestedData, links } = requests;
+    const [showModal, setShowModal] = useState(false);
 
-    const { dataForm, setData, errors, post, processing } = useForm({
-       
+
+    const { data, setData, errors, post, processing } = useForm({
+        consent_id: "",
+        expiry_date: "",
+        onlyOnce: false
     });
 
     const createEthereumContract = async () => {
@@ -70,8 +80,9 @@ const ConsentRequests = () => {
         }
     } 
 
-    const grantPermission = (id) => {
-        post(route('patient.update-consent', [id, 'granted']), {
+    const grantPermission = () => {
+        console.log({data});
+        post(route('patient.update-consent', [data.consent_id, 'granted']), {
             preserveState: false,
             onSuccess: async (data) => {
                 var consent = data.props?.data;
@@ -97,6 +108,15 @@ const ConsentRequests = () => {
         })
     }
 
+    const onHandleChange = (event) => {
+        setData(
+            event.target.name,
+            event.target.type === "checkbox"
+                ? event.target.checked
+                : event.target.value
+        );
+    };
+
     return (
         <>
             <Head title="Patients" />
@@ -117,7 +137,7 @@ const ConsentRequests = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map(
+                        {requestedData.map(
                             ({
                                 id,
                                 requestor_name,
@@ -152,7 +172,10 @@ const ConsentRequests = () => {
                                     <td className="border-t px-6">
                                         <div className="flex gap-2 items-center h-full">
                                         <LoadingButton
-                                            onClick={() => grantPermission(id)}
+                                            onClick={() => {
+                                                setShowModal(true); 
+                                                setData('consent_id', id);
+                                            }}
                                             type="button"
                                             processing={processing}
                                         >
@@ -182,6 +205,55 @@ const ConsentRequests = () => {
                 </table>
             </div>
             <Pagination links={links} />
+            <Modal show={showModal} onClose={() => setShowModal(false)}>
+                <div className="p-6">
+                    <h2 className="text-lg font-medium text-gray-900">
+                        Grant Permission
+                    </h2>
+                    <form onSubmit={grantPermission}>
+                        <div className="flex flex-wrap p-8 -mb-8 -mr-6 items-center space-x-8">
+                            <div className="w-full lg:w-1/2">
+                                <InputLabel forInput="name" value="Consent Valid Till Date:" />
+                                <TextInput
+                                    name="expiry_date"
+                                    type="date"
+                                    value={data.expiry_date}
+                                    maxLength={100}
+                                    handleChange={(e) =>
+                                        setData("expiry_date", e.target.value)
+                                    }
+                                />
+                            </div>
+                            <label className="flex items-center mt-6 select-none">
+                                <Checkbox
+                                    name="onlyOnce"
+                                    value={data.onlyOnce}
+                                    handleChange={onHandleChange}
+                                />
+                                <span className="ml-2 text-sm text-gray-600">
+                                    Only Once
+                                </span>
+                            </label>
+                        </div>
+                    </form>            
+                    <div className="mt-6 flex justify-end">
+                        <SecondaryButton
+                            onClick={() => setShowModal(false)}
+                        >
+                            Cancel
+                        </SecondaryButton>
+
+                        <DangerButton
+                            className="ml-3"
+                            processing={processing}
+                            type="button"
+                            onClick={grantPermission}
+                        >
+                            Grant Permission
+                        </DangerButton>
+                    </div>
+                </div>
+            </Modal>
         </>
     );
 };

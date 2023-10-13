@@ -10,10 +10,16 @@ import React from "react";
 
 export default function Logo(props) {
     return (
-        <h1
-            {...props}
-        >
-           Patient Consent Management
-        </h1>
+        // <h1
+        //     {...props}
+        // >
+        //    Patient Consent Management
+        // </h1>
+        <div className="flex justify-center items-center w-full space-x-2">
+            <span className="w-[50px] h-auto">
+                <img src="/logo-short.png" />
+            </span>
+            <h1 className="text-3xl text-white">PCM</h1>
+        </div>
     );
 }

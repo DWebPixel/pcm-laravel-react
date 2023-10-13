@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 use Inertia\Inertia;
+use PDF;
 
 class DoctorController extends Controller
 {
@@ -124,7 +125,25 @@ class DoctorController extends Controller
     }
 
     public function viewHealthRecords(User $patient, Consent $consent, Request $request)
-    {
+    {   
+        $requestor = auth()->user();
+        $org =  $requestor->organizations()->first();
+
+        //check if the right user if any other person is trying to access the records
+        if($consent->requestor_id != $requestor->id) {
+            $message = "$requestor->name was trying to access health records of $patient->name. Access was denied!";
+            addLog($patient->id, $requestor->id, $org?->id, 'access_records_denied', $message, json_encode($requestor));
+            abort(403);
+        }
+
+        //Check if consent belongs to the passed in patient
+        if($consent->requestee_id != $patient->id) {
+            abort(403, "Consent invalid for current patient");
+        }
+
+        $message = "$requestor->name accessed health records of $patient->name";
+        addLog($patient->id, $requestor->id, $org->id, 'access_records', $message, json_encode($consent));
+
         $healthRecords = $patient->healthRecords()->with('files')->get()->filter(function($record) use ($consent) {
             return array_intersect($record->purposeFiltered, $consent->grantedPurposeFiltered);
         })->transform(fn ($record) => [
@@ -139,7 +158,16 @@ class DoctorController extends Controller
             'files' => $record->files
         ])->toArray();
 
-        //dd($healthRecords);
+       //Check if consent was only approved for one time check
+        if($consent->only_once) {
+            sleep(1);
+            $consent->status = "revoked";
+            $consent->revoked_on = now();
+            $consent->save();
+
+            $message = "$requestor->name's consent from $patient->name was revoked as they have exhuasted their quota for viewing records";
+            addLog($patient->id, $requestor->id, $org->id, 'access_revoked', $message, json_encode($consent));
+        }
         
         return Inertia::render('Doctor/ViewHealthRecords', [ 'healthRecords' => array_values($healthRecords), 'patient' => $patient]);
     }

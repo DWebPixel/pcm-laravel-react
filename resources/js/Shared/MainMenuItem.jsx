@@ -19,7 +19,7 @@ export default ({ icon, link, text }) => {
     return (
         <div className="mb-2">
             <Link
-                href={route(link)}
+                href={link ? route(link) : ""}
                 className="flex text-indigo-300 items-center group py-3"
             >
                 <Icon name={icon} className={iconClasses} />

@@ -6,6 +6,7 @@ use App\Http\Controllers\ConsentSettingsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\ImagesController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\OrganizationsController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PatientsController;
@@ -81,12 +82,15 @@ Route::middleware('auth')->group(function () {
         Route::post('consent-settings/{setting}/update', [ConsentSettingsController::class, 'update'])->name('consent-settings.update');
         Route::get('logs', [PatientController::class, 'viewLogs'])->name('view-logs');
     });
+
+    Route::get('dowload-logs', [LogController::class, 'createPDF'])->name('download-logs');
 });
 
 // Images
 Route::get('/img/{path}', [ImagesController::class, 'show'])
     ->where('path', '.*')
     ->name('image');
+
 
 Route::get("/validate_health_record_file", function() {
     

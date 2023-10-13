@@ -23,7 +23,7 @@ const ConnectedPatients = () => {
     return (
         <>
             <Head title="Patients" />
-            <h1 className="mb-8 text-3xl font-bold">Connected Patients</h1>
+            <h1 className="mb-8 text-3xl font-bold">Recieved Consents</h1>
             <div className="overflow-x-auto bg-white rounded shadow">
                 <table className="w-full whitespace-nowrap">
                     <thead>

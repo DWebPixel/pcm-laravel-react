@@ -66,7 +66,7 @@ const ConnectedEntities = () => {
     return (
         <>
             <Head title="Patients" />
-            <h1 className="mb-8 text-3xl font-bold">Connected Entities</h1>
+            <h1 className="mb-8 text-3xl font-bold">Granted Consents</h1>
             <div className="overflow-x-auto bg-white rounded shadow">
                 <table className="w-full whitespace-nowrap">
                     <thead>

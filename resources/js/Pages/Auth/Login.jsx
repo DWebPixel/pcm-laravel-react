@@ -53,10 +53,13 @@ export default function Login() {
         <div className="flex items-center justify-center min-h-screen p-6 bg-indigo-800">
             <Head title="Login"/>
             <div className="w-full max-w-md">
-                <Logo
+                {/* <Logo
                     className="block text-white text-2xl font-bold text-center"
                     height={50}
-                />
+                /> */}
+                 <div className="flex justify-center w-full">
+                    <img src="/logo.png" className="w-[300px] h-auto"/>
+                </div>
                 <form
                     onSubmit={submit}
                     className="mt-8 overflow-hidden bg-white rounded-lg shadow-xl"

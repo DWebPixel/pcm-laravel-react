@@ -23,9 +23,10 @@ export default ({ className, onClick }) => {
             { auth.user.role != 'Patient' && auth.user.role != 'Admin' && 
                 ( <>
                     <MainMenuItem text="Dashboard" link="dashboard" icon="dashboard" />
-                    <MainMenuItem text="Connected Patients" link="doctor.connected-patients" icon="users" />
-                    <MainMenuItem text="Request Consent" link="doctor.request-consent" icon="printer" />
-                    <MainMenuItem text="View Logs" link="doctor.view-logs" icon="printer" />
+                    <MainMenuItem text="Recieved Consents" link="doctor.connected-patients" icon="users" />
+                    <MainMenuItem text="Request Consent" link="doctor.request-consent" icon="location" />
+                    <MainMenuItem text="Reconciliation" link="doctor.view-logs" icon="book" />
+                    <MainMenuItem text="Pain Application" icon="printer" />
                 </>
                 )
             }
@@ -33,11 +34,12 @@ export default ({ className, onClick }) => {
             { auth.user.role == 'Patient' && 
                 ( <>
                     <MainMenuItem text="Dashboard" link="dashboard" icon="dashboard" />
-                    <MainMenuItem text="Connected Entities" link="patient.connected-entities" icon="users" />
-                    <MainMenuItem text="Consent Requests" link="patient.index-consents" icon="printer" />
+                    <MainMenuItem text="Granted Consents" link="patient.connected-entities" icon="users" />
+                    <MainMenuItem text="Consent Requests" link="patient.index-consents" icon="location" />
                     <MainMenuItem text="Health Records" link="patient.index-health-records" icon="printer" />
-                    <MainMenuItem text="Consent Settings" link="patient.consent-settings.index" icon="printer" />
-                    <MainMenuItem text="View Logs" link="patient.view-logs" icon="printer" />
+                    <MainMenuItem text="Consent Settings" link="patient.consent-settings.index" icon="office" />
+                    <MainMenuItem text="Reconciliation" link="patient.view-logs" icon="book" />
+                    <MainMenuItem text="Pain Application" icon="printer" />
                 </>
                 )
             }

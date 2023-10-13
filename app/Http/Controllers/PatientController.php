@@ -39,8 +39,13 @@ class PatientController extends Controller
             $update_array['granted_on'] = now();
             $update_array['granted_purpose'] = $consent->purpose;
             $update_array['granted_access_type'] = $consent->access_type;
+            $update_array['only_once'] = $request->onlyOnce;
+
+            if($request->has('expiry_date')) {
+                $update_array['expiry_date'] = $request->expiry_date;
+            }
             //$update_array['expiry_date'] = Carbon::now()->addMonth();
-            $update_array['expiry_date'] = Carbon::now()->addMinutes(20);
+            //$update_array['expiry_date'] = Carbon::now()->addMinutes(20);
         } else if( $status == 'denied') {
             $update_array['denied_on'] = now();
         } else if( $status == 'revoked') {
