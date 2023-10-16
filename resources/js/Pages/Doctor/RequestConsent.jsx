@@ -10,6 +10,7 @@ import Checkbox from "@/Shared/Checkbox";
 
 import { ethers } from "ethers";
 import { contractABI, contractAddress } from "@/constants";
+import { getAccessTypeForBlockchain, getPuporseTypesForBlockchain } from "@/utils";
 
 const RequestConsent = () => {
     
@@ -74,43 +75,6 @@ const RequestConsent = () => {
       
         return transactionsContract;
     };
-
-    const getAccessTypeForBlockchain = (access_type) => {
-        const reversedArray = {
-            "Read" : 0,
-            "Copy" : 1,
-            "Write": 2
-        };
-        return reversedArray[access_type];
-    }
-
-    const getPuporseTypesForBlockchain = (purposes) => {
-        const reversedArray = {
-            "GeneralPurpose": 0,
-            "Education": 1,
-            "E-Statistic": 2,
-            "E-MedicineDiscovery": 3,
-            "MedicalTreatment": 4,
-            "M-Cancer": 5,
-            "M-Diabetic": 6,
-            "M-Education": 7,
-            "M-Mental": 8,
-            "Insurance": 9,
-            "I-EvaluatelnsuranceStatus": 10
-        };
-
-        var purposeTypes = [];
-
-        for (const [key, value] of Object.entries(purposes)) {
-            if( value ) {
-                purposeTypes.push( reversedArray[key] )
-            }
-          }
-
-
-        return purposeTypes;
-    }
-
 
     const submitDataToBlockchain = async (consent) => {
         try {

@@ -54,6 +54,7 @@ const Create = () => {
                 console.log({response})
                 if( response ) {
                    await submitDataToBlockchain(response)
+                   window.location.href = route('organizations.edit', organization.id)
                 }
             },
         });

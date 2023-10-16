@@ -15,7 +15,7 @@ const Create = () => {
         first_name: "",
         last_name: "",
         email: "",
-        password: "",
+        password: "Password@2023",
         bc_address: "",
         address: "",
         contact: "",

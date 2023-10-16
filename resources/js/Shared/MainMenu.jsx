@@ -14,6 +14,7 @@ export default ({ className, onClick }) => {
                         link="organizations.index"
                         icon="office"
                     />
+                    <MainMenuItem text="Users" link="users.index" icon="users" />
                     <MainMenuItem text="Patients" link="patients.index" icon="users" />
                     <MainMenuItem text="Reports" link="reports" icon="printer" />
                 </>

@@ -8,12 +8,17 @@ import InputLabel from "@/Shared/InputLabel";
 import InputError from "@/Shared//InputError";
 import Checkbox from "@/Shared/Checkbox";
 
+import { ethers } from "ethers";
+import { contractABI, contractAddress } from "@/constants";
+import { getAccessTypeForBlockchain, getPuporseTypesForBlockchain } from "@/utils";
+
 const Create = () => {
     const { roles } = usePage().props;
     console.log(roles);
     const { data, setData, errors, post, processing, reset} = useForm({
         role: "",
         access_type: "",
+        expiryDays: 30,
         purpose: {
             "GeneralPurpose": false,
             "Education": false,
@@ -30,20 +35,52 @@ const Create = () => {
         },
     );
 
+    const createEthereumContract = async () => {
+        const provider = new ethers.BrowserProvider(ethereum);
+        const signer = await provider.getSigner();
+        const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
+      
+        return transactionsContract;
+    };
+
+    const submitDataToBlockchain = async (setting) => {
+        try {
+            if (ethereum) {
+                const transactionsContract = await createEthereumContract();
+
+                var accessType = getAccessTypeForBlockchain(setting.access_type);
+                var purposeTypes = getPuporseTypesForBlockchain(JSON.parse(setting.purpose));
+
+                const transactionHash = await transactionsContract.setConsentSettings(
+                    setting.role,
+                    accessType,
+                    purposeTypes,
+                    setting.expiry_days
+                );  
+                console.log(transactionHash.hash);
+            } else {
+            console.log("No ethereum object");
+            }
+        } catch (error) {
+            console.log(error);
+    
+            throw new Error("No ethereum object");
+        }
+    }
+
     function handleSubmit(e) {
         e.preventDefault();
         post(route("patient.consent-settings.store"), {
-            onSuccess: () => {
-                reset();
+            preserveState: false,
+            onSuccess: async (data) => {
+                var setting = data.props?.data;
+                console.log({setting})
+                if( setting ) {
+                    await submitDataToBlockchain(setting)
+                    window.location.href = route('patient.consent-settings.index')
+                }
             },
         });
-    }
-
-    const handleSelectChange = (role, access) => {
-        setData("roles", {
-            ...data["roles"],
-            [role]: access,
-          });
     }
 
     const handleCheckboxChange = (type) => {
@@ -140,6 +177,25 @@ const Create = () => {
                             </SelectInput>
                             <InputError message={errors.access_type} />
                         </div>
+                        <div className="w-full pb-7 pr-6 lg:w-1/2">
+                            <InputLabel forInput="expiryDays" value="Auto Expire After" />
+                            <SelectInput
+                                name="expiryDays"
+                                value={data.expiryDays}
+                                onChange={(e) =>
+                                    setData('expiryDays', e.target.value)
+                                }
+                            >
+                                <option value="">Select Days</option>
+                                <option value="1">1 Day</option>
+                                <option value="10">10 Days</option>
+                                <option value="15">15 Days</option>
+                                <option value="30">30 Days</option>
+                                <option value="45">45 Days</option>
+                            </SelectInput>
+                            <InputError message={errors.expiryDays} />
+                        </div>
+                        
                         <div className="w-full pb-7 pr-6">
                             <InputLabel
                                 forInput="purpose"

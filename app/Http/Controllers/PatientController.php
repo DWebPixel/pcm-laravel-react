@@ -43,8 +43,9 @@ class PatientController extends Controller
 
             if($request->has('expiry_date')) {
                 $update_array['expiry_date'] = $request->expiry_date;
+            } else {
+                $update_array['expiry_date'] = Carbon::now()->addYear();
             }
-            //$update_array['expiry_date'] = Carbon::now()->addMonth();
             //$update_array['expiry_date'] = Carbon::now()->addMinutes(20);
         } else if( $status == 'denied') {
             $update_array['denied_on'] = now();

@@ -27,6 +27,7 @@ const Index = () => {
                             <th className="px-6 pt-5 pb-4">Role</th>
                             <th className="px-6 pt-5 pb-4">Access Type</th>
                             <th className="px-6 pt-5 pb-4">Purpose</th>
+                            <th className="px-6 pt-5 pb-4">Expire After</th>
                             <th className="px-6 pt-5 pb-4" colSpan="2">
                                 Action
                             </th>
@@ -34,7 +35,7 @@ const Index = () => {
                     </thead>
                     <tbody>
                         {consentsSettings.map(
-                            ({ id, role, access_type, purpose }) => {
+                            ({ id, role, access_type, purpose, expiry_days }) => {
                                 return (
                                     <tr
                                         key={id}
@@ -77,6 +78,14 @@ const Index = () => {
                                                 className="px-6 py-4 focus:text-indigo focus:outline-none"
                                             >
                                                 {purpose.map((item, index) => <p key={index}>{item}</p>)}
+                                            </Link>
+                                        </td>
+                                        <td className="border-t">
+                                            <Link
+                                                href={route("patient.consent-settings.edit", id)}
+                                                className="flex items-center px-6 py-4 focus:text-indigo-700 focus:outline-none"
+                                            >
+                                                {expiry_days} Day(s)
                                             </Link>
                                         </td>
                                         <td className="w-px border-t">

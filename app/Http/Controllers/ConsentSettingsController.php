@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ConsentSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 use Inertia\Inertia;
 
@@ -19,6 +20,7 @@ class ConsentSettingsController extends Controller
                     'role' => $setting->role,
                     'access_type' => $setting->access_type,
                     'purpose' => $setting->purposeFiltered,
+                    'expiry_days' => $setting->expiry_days
                 ]),
         ]);
     }
@@ -48,16 +50,18 @@ class ConsentSettingsController extends Controller
         FacadesRequest::validate([
             'role' => ['required'],
             'access_type' => ['required'],
-            'purpose' => ['required']
+            'purpose' => ['required'],
+            "expiryDays" => ['required'],
         ]);
         
-        auth()->user()->consentSettings()->create([
+        $setting = auth()->user()->consentSettings()->create([
             'role' => $request->role,
             'access_type' => $request->access_type,
             'purpose' =>  json_encode($request->purpose),
+            "expiry_days" => $request->expiryDays,
         ]); 
 
-        return to_route('patient.consent-settings.index')->with('success', 'Setting Created Successfully!');
+        return Redirect::back()->with(['success', 'Setting Created Successfully!', 'data' => $setting]);
     }
 
     public function update(ConsentSetting $setting, Request $request)
@@ -65,15 +69,17 @@ class ConsentSettingsController extends Controller
         FacadesRequest::validate([
             'role' => ['required'],
             'access_type' => ['required'],
-            'purpose' => ['required']
+            'purpose' => ['required'],
+            "expiryDays" => ['required'],
         ]);
         
         $setting->update([
             'role' => $request->role,
             'access_type' => $request->access_type,
             'purpose' =>  json_encode($request->purpose),
+            "expiry_days" => $request->expiryDays,
         ]); 
 
-        return to_route('patient.consent-settings.index')->with('success', 'Setting Updated Successfully!');
+        return Redirect::back()->with(['success', 'Setting Updated Successfully!', 'data' => $setting]);
     }
 }
