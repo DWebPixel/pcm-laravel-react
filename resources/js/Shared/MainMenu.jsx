@@ -24,7 +24,7 @@ export default ({ className, onClick }) => {
             { auth.user.role != 'Patient' && auth.user.role != 'Admin' && 
                 ( <>
                     <MainMenuItem text="Dashboard" link="dashboard" icon="dashboard" />
-                    <MainMenuItem text="Recieved Consents" link="doctor.connected-patients" icon="users" />
+                    <MainMenuItem text="Received Consents" link="doctor.connected-patients" icon="users" />
                     <MainMenuItem text="Request Consent" link="doctor.request-consent" icon="location" />
                     <MainMenuItem text="Reconciliation" link="doctor.view-logs" icon="book" />
                     <MainMenuItem text="Pain Application" icon="printer" />
